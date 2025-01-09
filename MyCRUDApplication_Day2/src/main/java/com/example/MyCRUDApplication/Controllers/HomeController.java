@@ -1,4 +1,4 @@
-package com.example.MyCRUDApplication;
+package com.example.MyCRUDApplication.Controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

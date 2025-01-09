@@ -1,5 +1,6 @@
-package com.example.MyCRUDApplication;
+package com.example.MyCRUDApplication.Repositories;
 
+import com.example.MyCRUDApplication.Model.clientModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;

@@ -1,17 +1,17 @@
-package com.example.MyCRUDApplication;
+package com.example.MyCRUDApplication.DTO;
 
-public class clientModel {
-    private int id;
+import jakarta.validation.constraints.*;
+
+public class ClientDto {
+    @NotEmpty
     private String firstName;
+    @NotEmpty
     private String lastName;
+    @NotEmpty
+    @Email
     private String email;
     private String phone;
     private String address;
-    private String CreatedAt;
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
@@ -33,14 +33,6 @@ public class clientModel {
         this.address = address;
     }
 
-    public void setCreatedAt(String createdAt) {
-        CreatedAt = createdAt;
-    }
-
-    public int getId() {
-        return id;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -59,9 +51,5 @@ public class clientModel {
 
     public String getAddress() {
         return address;
-    }
-
-    public String getCreatedAt() {
-        return CreatedAt;
     }
 }

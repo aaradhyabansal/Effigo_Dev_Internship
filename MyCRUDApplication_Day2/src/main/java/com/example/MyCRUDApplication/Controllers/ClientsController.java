@@ -1,9 +1,12 @@
-package com.example.MyCRUDApplication;
+package com.example.MyCRUDApplication.Controllers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
+import com.example.MyCRUDApplication.DTO.ClientDto;
+import com.example.MyCRUDApplication.Model.clientModel;
+import com.example.MyCRUDApplication.Repositories.ClientRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
