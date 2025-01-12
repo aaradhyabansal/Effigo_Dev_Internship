@@ -10,6 +10,6 @@ public class JwtUtil {
         return generateToken(new HashMap<>(),userDetails);
     }
 
-    private <K, V> String generateToken(HashMap<K,V> kvHashMap, UserDetails userDetails) {
+    private <K, V> String generateToken(java.util.HashMap<K,V> kvHashMap, UserDetails userDetails) {
     }
 }
