@@ -35,7 +35,7 @@ public class CourseJdbcRepository {
 
     public void insert(Course course)
     {
-        springJdbc.update(INSERT_QUERY,course.getId(),course.getName(),course.getAuthor());
+        springJdbc.update(INSERT_QUERY,course.getId(),course.getname(),course.getauthor());
     }
 
     public void delete(Course course)

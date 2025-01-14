@@ -10,10 +10,10 @@ import org.springframework.stereotype.Component;
 public class Course {
     @Id
     private int id;
-    @Column(name="Name")
-    private String Name;
-    @Column(name="Author")
-    private String Author;
+    @Column(name="name")
+    private String name;
+    @Column(name="author")
+    private String author;
 
     public Course()
     {
@@ -22,40 +22,40 @@ public class Course {
 
     public Course(int id, String name, String author) {
         this.id = id;
-        Name = name;
-        Author = author;
+        name = name;
+        author = author;
     }
 
     public int getId() {
         return id;
     }
 
-    public String getName() {
-        return Name;
+    public String getname() {
+        return name;
     }
 
-    public String getAuthor() {
-        return Author;
+    public String getauthor() {
+        return author;
     }
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setname(String name) {
+        name = name;
     }
 
-    public void setAuthor(String author) {
-        Author = author;
+    public void setauthor(String author) {
+        author = author;
     }
 
     @Override
     public String toString() {
         return "Course{" +
                 "id=" + id +
-                ", Name='" + Name + '\'' +
-                ", Author='" + Author + '\'' +
+                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
                 '}';
     }
 

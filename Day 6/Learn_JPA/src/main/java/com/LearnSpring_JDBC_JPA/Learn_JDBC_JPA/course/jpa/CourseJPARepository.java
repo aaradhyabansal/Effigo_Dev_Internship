@@ -20,17 +20,17 @@ public class CourseJPARepository {
         entityManager.merge(course);
     }
 
-    public Course getCourse(long id)
+    public Course findById(long id)
     {
         return entityManager.find(Course.class,id);
     }
 
-    public void delete(long id)
+    public void deleteById(long id)
     {
         Course course=entityManager.find(Course.class,id);
         entityManager.remove(course);
     }
-    public List<Course> getAllCourses()
+    public List<Course> getAll()
     {
         String jpql = "SELECT c FROM Course c";
         return entityManager.createQuery(jpql,Course.class).getResultList();
