@@ -15,7 +15,8 @@ public class CourseController {
                 new Course(1,"Learn Java17","By Hello World"),
                 new Course(2,"Learn git","By Hello Git"),
                 new Course(3,"Learn Maven","By Hello Maven"),
-                new Course(4,"Learn Spring","By Hello Spring")
+                new Course(4,"Learn Spring","By Hello Spring"),
+                new Course(5,"Learn Spring","By Hello Spring")
         );
     }
 
