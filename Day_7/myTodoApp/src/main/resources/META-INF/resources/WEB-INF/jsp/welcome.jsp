@@ -10,8 +10,11 @@
     <title>Logged In</title>
 </head>
 <body>
-<%--<pre>${username}</pre>--%>
+<pre>${username}</pre>
 <h1>on45thioghgh3nt4ihgtr</h1>
 <h1>Welcome, <%=request.getAttribute("username") %>! You are logged in! Your password is <%=request.getAttribute("password") %>.</h1>
+<div>
+    <a href="list-todos">Manage</a> Your Todos
+</div>
 </body>
 </html>

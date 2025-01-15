@@ -6,12 +6,12 @@
     <link href="webjars/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome <%=request.getAttribute("username") %>}</title>
+    <title>Welcome </title>
 </head>
 <body>
 <div class="container">
-<h1>Welcome, to Todos Page!</h1>
-<div>Your Todos are         </div>
+<h1>Welcome ${username}, to Todos Page!</h1>
+<div>Your Todos are
 <table class="table">
     <thead>
     <tr>
@@ -23,16 +23,19 @@
     </thead>
     <tbody>
     <c:forEach items="${todos}" var="todo">
-        <tr>${todo.id}</tr>
-        <tr>${todo.description}</tr>
-        <tr>${todo.targetDate}</tr>
-        <tr>${todo.done}</tr>
+        <tr>
+        <td>${todo.id}</td>
+        <td>${todo.description}</td>
+        <td>${todo.targetDate}</td>
+        <td>${todo.done}</td>
+        </tr>
     </c:forEach>
     </tbody>
 </table>
 <script src="webjars/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <script src="webjars/jquery/3.6.0/jquery.min.js"></script>
     <a href="add-todo" class="btn btn-success">Add Todo</a>
+</div>
 </div>
 </body>
 </html>
