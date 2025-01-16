@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class TodoService {
@@ -26,7 +29,9 @@ public class TodoService {
      }
      public List<Todo> getTodosByUsername(String username)
      {
-         return todos;
+         List<Todo> todoo=todos.stream().filter(todo->todo.getUsername().equalsIgnoreCase(username)).toList();
+         return todoo;
+
      }
 
      public void addTodo(String username,String description,LocalDate targetDate,boolean done)

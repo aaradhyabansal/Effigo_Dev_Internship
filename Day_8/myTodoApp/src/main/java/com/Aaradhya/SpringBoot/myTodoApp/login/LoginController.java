@@ -2,6 +2,9 @@ package com.Aaradhya.SpringBoot.myTodoApp.login;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -14,18 +17,16 @@ public class LoginController {
     private AuthenticationService authenticationService ;
 
 
-    @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String goToLogin() {
-        return "login";
-    }
-    @RequestMapping(value="/login", method = RequestMethod.POST)
-    public String goToWelcome(@RequestParam String username, @RequestParam String password, ModelMap model) {
-
-        model.addAttribute("username", username);
-        model.addAttribute("password", password);
-        if(authenticationService.authenticate(username,password))
+    @RequestMapping(value="/", method = RequestMethod.GET)
+    public String goToWelcome(ModelMap model) {
+        model.put("username",getLoggedInUsernamw());
         return "welcome";
-
-        return "login";
     }
+
+    private String getLoggedInUsernamw()
+    {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
+    }
+
 }
