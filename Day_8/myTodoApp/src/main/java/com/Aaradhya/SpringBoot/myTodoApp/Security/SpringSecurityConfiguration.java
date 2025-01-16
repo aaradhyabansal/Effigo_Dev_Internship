@@ -50,7 +50,7 @@ public class SpringSecurityConfiguration {
             http.formLogin(withDefaults());
             http.csrf().disable();
             http.headers().frameOptions().disable();
-            
+
             return http.build();
 
         }
