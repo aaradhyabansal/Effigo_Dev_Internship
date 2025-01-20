@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [isAuth, setIsAuth] = useState(false);
+  const authContext = useAuth();
   const navigate = useNavigate();
   function handleUsername(e) {
     setUsername(e.target.value);
@@ -15,7 +17,8 @@ function Login() {
     console.log(password);
   }
   function handleAuth() {
-    if ("aaradhya" === username && "abcd1234" === password) {
+    if (authContext.login(username, password)) {
+      authContext.setUsername(username);
       setIsAuth(true);
       navigate(`/welcome/${username}`);
     }

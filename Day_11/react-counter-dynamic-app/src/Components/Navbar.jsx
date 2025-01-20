@@ -1,4 +1,11 @@
+import { useAuth } from "./AuthContext";
+
 function Navbar() {
+  const authContext = useAuth();
+  console.log(authContext);
+  function handleLogout() {
+    authContext.logout();
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-md navbar-light bg-light mb-3 p-1 shadow-sm">
@@ -31,9 +38,19 @@ function Navbar() {
           </ul>
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link text-danger fw-bold" href="/">
-                Logout
-              </a>
+              {authContext.isAuthenticated ? (
+                <a
+                  className="nav-link text-danger fw-bold"
+                  href="/"
+                  onClick={handleLogout}
+                >
+                  Logout
+                </a>
+              ) : (
+                <a className="nav-link text-danger fw-bold" href="/login">
+                  Login
+                </a>
+              )}
             </li>
           </ul>
         </div>
