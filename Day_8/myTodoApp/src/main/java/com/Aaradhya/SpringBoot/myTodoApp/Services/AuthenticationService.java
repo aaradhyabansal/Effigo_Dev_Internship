@@ -1,6 +1,5 @@
-package com.Aaradhya.SpringBoot.myTodoApp.login;
+package com.Aaradhya.SpringBoot.myTodoApp.Services;
 
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

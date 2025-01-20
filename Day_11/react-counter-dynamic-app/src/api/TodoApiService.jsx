@@ -19,3 +19,7 @@ export function retrieveTodoForUserById(username, id) {
 export function updateTodoForUserById(username, id, todo) {
   return apiClient.put(`/users/${username}/todos/${id}`, todo);
 }
+
+export function addTodoForUser(username, todo) {
+  return apiClient.post(`/users/${username}/todos`, todo);
+}

@@ -1,15 +1,12 @@
-package com.Aaradhya.SpringBoot.myTodoApp.todo;
+package com.Aaradhya.SpringBoot.myTodoApp.Services;
 
+import com.Aaradhya.SpringBoot.myTodoApp.Repository.TodoRepository;
+import com.Aaradhya.SpringBoot.myTodoApp.Models.Todo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 //@Service
 //public class TodoService {

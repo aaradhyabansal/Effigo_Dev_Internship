@@ -112,17 +112,13 @@ function Listtodo() {
   }
 
   function UpdateTodo(id) {
-    console.log("Clicked " + id);
     navigate(`/listtodo/${id}`);
-    // updateTodoForUserById(id)
-    //   .then(() => {
-    //     setMessage(`Updation Successful for ID=${id} Todo Successful`);
-    //     refreshTodos();
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
   }
+  function addNewTodo() {
+    console.log("Clicked for New Todo ");
+    navigate(`/listtodo/-1`);
+  }
+
   return (
     <div className="d-flex flex-column align-items-center justify-content-center vh-100">
       <h1 className="mb-4">{username}, Tasks To Do Are</h1>
@@ -163,6 +159,11 @@ function Listtodo() {
             ))}
           </tbody>
         </table>
+      </div>
+      <div>
+        <button className="btn btn-success" onClick={addNewTodo}>
+          Add new todo
+        </button>
       </div>
     </div>
   );
