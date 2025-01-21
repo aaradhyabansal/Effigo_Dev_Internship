@@ -19,11 +19,11 @@ public class LoginController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String goToWelcome(ModelMap model) {
-        model.put("username",getLoggedInUsernamw());
+        model.put("username",getLoggedInUsername());
         return "welcome";
     }
 
-    private String getLoggedInUsernamw()
+    private String getLoggedInUsername()
     {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         return authentication.getName();

@@ -1,15 +1,17 @@
-package com.fullStackTodo.TodoApp.todo;
+package com.fullStackTodo.TodoApp.Controllers;
 
+import com.fullStackTodo.TodoApp.Models.Todo;
+import com.fullStackTodo.TodoApp.Services.TodoService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-public class TodoResource {
+public class TodoController {
     private TodoService todoService;
 
-    public TodoResource(TodoService todoService) {
+    public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
 
@@ -43,6 +45,7 @@ public class TodoResource {
     {
 
       Todo createdTodo=  todoService.addTodo(username,todo.getDescription(),todo.getTargetDate(),todo.isDone());
-        return createdTodo;
+        return createdTodo
+                ;
     }
 }

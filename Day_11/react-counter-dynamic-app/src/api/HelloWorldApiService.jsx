@@ -13,5 +13,9 @@ export function retrieveHelloWorld() {
 }
 
 export function retrieveHelloWorldPathVar(username) {
-  return apiClient.get(`/hello-world/path-variable/:${username}`);
+  return apiClient.get(`/hello-world/path-variable/:${username}`, {
+    headers: {
+      Authorization: `Basic YWFyYWRoeWE6YWJjZDEyMzQ=`,
+    },
+  });
 }

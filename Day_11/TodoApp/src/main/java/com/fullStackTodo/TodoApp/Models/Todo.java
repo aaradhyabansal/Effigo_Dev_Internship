@@ -1,4 +1,4 @@
-package com.fullStackTodo.TodoApp.todo;
+package com.fullStackTodo.TodoApp.Models;
 
 import java.time.LocalDate;
 
