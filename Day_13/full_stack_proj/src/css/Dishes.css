@@ -1,0 +1,8 @@
+/* Dishes.css */
+
+.dishes-container {
+  width: 100%;
+  background: linear-gradient(-45deg, #00dbde, #fc00ff);
+  color: white;
+  padding: 16px;
+}
