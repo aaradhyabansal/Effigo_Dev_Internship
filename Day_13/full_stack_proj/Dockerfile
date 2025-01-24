@@ -1,25 +1,37 @@
-# Stage 1: Build the React app
+# Stage 1: Build the React app using Vite
 FROM node:18 AS build
 
+# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json for dependency installation
-COPY package.json package-lock.json* yarn.lock* ./
-
+# Copy package files and install dependencies
+COPY package.json package-lock.json* ./
 RUN npm install
 
-# Copy the rest of the app's source code
+# Copy the source code
 COPY . .
 
-# Build the app (Vite builds to 'dist' by default)
+# Build the Vite application
 RUN npm run build
 
-# Stage 2: Serve with Nginx
-FROM nginx:1.23-alpine
+# Stage 2: Serve the React app using Vite's preview server
+FROM node:18
 
-# Copy build artifacts from the first stage
-COPY --from=build /app/dist /usr/share/nginx/html
+# Set the working directory
+WORKDIR /app
 
-EXPOSE 80
+# Copy the built application from the build stage
+COPY --from=build /app/dist ./dist
 
-CMD ["nginx", "-g", "daemon off;"]
+# Copy package.json and package-lock.json
+COPY package.json package-lock.json* ./
+
+# Install all dependencies (including dev dependencies to include Vite)
+RUN npm install
+
+# Expose the port for Vite's preview server (default: 4173)
+EXPOSE 4173
+
+# Start the Vite preview server
+CMD ["npx", "vite", "preview", "--host"]
+

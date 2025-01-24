@@ -5,12 +5,14 @@ import AddRestaurant from "../Components/AddRestaurant";
 import NavBar from "../Components/Navbar";
 import Dishes from "../Components/Dishes";
 import AddNewDish from "../Components/AddDish";
+import LandingPage from "../Components/LandingPage";
 
 function Food() {
   return (
     <div>
       <NavBar />
       <Routes>
+        <Route path="/" element={<LandingPage></LandingPage>}></Route>
         <Route path="/restaurants" element={<RestaurantList />}></Route>
         <Route path="/restaurants/:id" element={<RestaurantDetails />}></Route>
         <Route

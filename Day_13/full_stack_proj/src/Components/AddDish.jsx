@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { TextField, Button, Typography, Box, Container } from "@mui/material";
 import { addNewDish, updateDish, getDishById } from "../api/FoodApi";
 import { useNavigate, useParams } from "react-router-dom";
-import styled from "styled-components"; // Import styled-components
-import "../css/AddNewDish.css"; // Import the custom CSS file
+import styled from "styled-components";
+import "../css/AddNewDish.css";
 
 const AddNewDish = () => {
   const [name, setName] = useState("");
@@ -18,7 +18,7 @@ const AddNewDish = () => {
     const fetchDishDetails = async () => {
       if (id !== -1) {
         try {
-          const response = await getDishById(id); // Assuming `getDishById` fetches dish details
+          const response = await getDishById(id);
           const dish = response.data;
           setName(dish.name);
           setPrice(dish.price);

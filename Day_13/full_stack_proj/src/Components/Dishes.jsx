@@ -12,10 +12,10 @@ import {
   Button,
   Box,
 } from "@mui/material";
-import { getAllDishes, deleteDishById } from "../api/FoodApi"; // Assuming deleteDishById is defined in FoodApi
+import { getAllDishes, deleteDishById } from "../api/FoodApi";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components"; // Import styled-components
-import "../css/Dishes.css"; // Import the custom CSS file
+import styled from "styled-components";
+import "../css/Dishes.css";
 
 const Dishes = () => {
   const [dishes, setDishes] = useState([]);
@@ -25,7 +25,7 @@ const Dishes = () => {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await getAllDishes(); // Using the correct API function
+        const response = await getAllDishes();
         if (response.data) {
           setDishes(response.data);
         }
@@ -40,8 +40,8 @@ const Dishes = () => {
   // Handle delete action
   const handleDelete = async (id) => {
     try {
-      await deleteDishById(id); // Assuming deleteDishById is implemented in FoodApi
-      setDishes(dishes.filter((dish) => dish.id !== id)); // Update the state after deletion
+      await deleteDishById(id);
+      setDishes(dishes.filter((dish) => dish.id !== id));
     } catch (error) {
       console.error("Error deleting dish:", error);
     }
@@ -49,7 +49,7 @@ const Dishes = () => {
 
   // Handle update action
   const handleUpdate = (id) => {
-    navigate(`/dishes/addnewdish/${id}`); // Navigate to the update dish page
+    navigate(`/dishes/addnewdish/${id}`);
   };
 
   return (
