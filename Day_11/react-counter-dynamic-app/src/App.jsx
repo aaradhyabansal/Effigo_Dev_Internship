@@ -1,10 +1,13 @@
+import { BrowserRouter } from "react-router-dom";
 import "./App.css";
 import Todo from "./TodoApp/Todo";
 
 function App() {
   return (
     <div>
-      <Todo></Todo>
+      <BrowserRouter>
+        <Todo></Todo>
+      </BrowserRouter>
     </div>
   );
 }

@@ -3,6 +3,13 @@ package com.fullStackTodo.TodoApp.Models;
 import java.time.LocalDate;
 
 public class Todo {
+	private int id;
+
+	private String username;
+
+	private String description;
+	private LocalDate targetDate;
+	private boolean done;
 
 	public Todo() {
 		
@@ -17,13 +24,7 @@ public class Todo {
 		this.done = done;
 	}
 
-	private int id;
 
-	private String username;
-	
-	private String description;
-	private LocalDate targetDate;
-	private boolean done;
 
 	public int getId() {
 		return id;
