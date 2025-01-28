@@ -3,11 +3,13 @@ package com.RoleBasedAccess.Ed.Assign.Service;
 import com.RoleBasedAccess.Ed.Assign.Models.Roles;
 import com.RoleBasedAccess.Ed.Assign.Models.Users;
 import com.RoleBasedAccess.Ed.Assign.Repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -17,12 +19,15 @@ public class UserService implements UserDetailsService {
 
 
     private UserRepository userRepository;
+    private  BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public void AddNewUser(Users users) {
+    public void addNewUser(Users users) {
+        users.setPassword(passwordEncoder.encode(users.getPassword()));
         userRepository.save(users);
     }
     public List<Users> getAllUsers() {

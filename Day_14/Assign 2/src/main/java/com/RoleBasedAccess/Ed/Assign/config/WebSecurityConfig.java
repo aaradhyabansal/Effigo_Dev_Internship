@@ -1,7 +1,7 @@
 package com.RoleBasedAccess.Ed.Assign.config;
 
-import ch.qos.logback.core.net.SyslogOutputStream;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,12 +12,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+@Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain springSecurityFilterChain(HttpSecurity http) throws Exception {
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public SecurityFilterChain  customSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
@@ -37,13 +43,4 @@ public class WebSecurityConfig {
                 .passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }
-
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        System.out.println(new BCryptPasswordEncoder().encode("password"));
-        return new BCryptPasswordEncoder();
-    }
 }
-
-
