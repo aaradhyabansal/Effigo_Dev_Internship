@@ -110,7 +110,7 @@ const AddNewDish = () => {
                 sx={{ mt: 3 }}
                 onClick={handleOnClick}
               >
-                Add Dish
+                Submit
               </Button>
             </form>
           </StyledBox>

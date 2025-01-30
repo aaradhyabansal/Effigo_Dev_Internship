@@ -1,0 +1,190 @@
+.hover-effect {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.bg-pastel {
+  background-color: #f8f4f9;
+}
+
+.pastel-card {
+  background: linear-gradient(135deg, #f3e7e9 0%, #e3e5f3 100%);
+  border-radius: 15px;
+}
+
+.pastel-button {
+  background-color: #d4a5a5;
+  border: none;
+  color: white;
+}
+
+.pastel-button:hover {
+  background-color: #c48b8b;
+}
+
+.outline-pastel {
+  border: 2px solid #d4a5a5;
+  color: #d4a5a5;
+}
+
+.outline-pastel:hover {
+  background-color: #d4a5a5;
+  color: white;
+}
+
+.pastel-alert {
+  background-color: #f3e7e9;
+  border-color: #d4a5a5;
+  color: #5a4a4a;
+}
+
+.hover-effect {
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.highlight-title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.highlight-card {
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.highlight-card:hover {
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.highlight-button {
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.highlight-button:hover {
+  background-color: #c48b8b;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.highlight-text {
+  color: #5a4a4a;
+}
+
+.highlight-alert {
+  background-color: #f9f0f2;
+  border-color: #d4a5a5;
+}
+
+/* General Page Styling */
+.pastel-container {
+  background: linear-gradient(to bottom right, #f7e1d7, #d3e0ea);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Title Highlight */
+.highlight-title {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  color: #5a4a4a;
+  font-weight: bold;
+}
+
+/* Card Styling */
+.pastel-card {
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.pastel-card:hover {
+  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+/* Table Styling */
+.pastel-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pastel-table th,
+.pastel-table td {
+  font-weight: bold;
+  color: #5a4a4a;
+  border-bottom: 1px solid #ddd;
+  padding: 12px;
+}
+
+/* Table Row Hover Effect */
+.pastel-table tr {
+  transition: transform 0.3s ease-in-out;
+}
+
+.pastel-table tr:hover {
+  transform: translateY(-3px);
+}
+
+/* Button Styling */
+.pastel-button {
+  background-color: #e5989b !important;
+  color: white !important;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.pastel-button:hover {
+  background-color: #b5838d !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Outline Button */
+.outline-pastel {
+  border: 2px solid #e5989b !important;
+  color: #e5989b !important;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.outline-pastel:hover {
+  background-color: #e5989b !important;
+  color: white !important;
+}
+
+/* Alert Styling */
+.pastel-alert {
+  background-color: #f9f0f2 !important;
+  border-color: #d4a5a5 !important;
+  color: #5a4a4a !important;
+}
+
+/* Hover Effect */
+.hover-effect {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: translateY(-3px);
+}
+
+.pastel-navbar {
+  background: linear-gradient(to right, #f7e1d7, #d3e0ea);
+  padding: 10px 0;
+}
+
+.nav-link-custom {
+  font-weight: 600;
+  color: #5a4a4a !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link-custom:hover {
+  color: #b5838d !important;
+  transform: scale(1.05);
+}

@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/payments")
+@CrossOrigin
 public class PaymentController {
 
     private final JobLauncher jobLauncher;
@@ -31,26 +32,26 @@ public class PaymentController {
     public ResponseEntity<String> processPayment(@RequestBody List<Payment> payments) {
         try
         {
-            System.out.println("0");
-
+            System.out.println("000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
             paymentService.createPayment(payments);
-            System.out.println("1");
-
-
-
+            System.out.println(payments);
+            System.out.println("-----------------------------------------------");
             JobParameters jobParameters=new JobParametersBuilder()
                     .addLong("time", System.currentTimeMillis())
                     .toJobParameters();
-            System.out.println("2");
+
 
             jobLauncher.run(paymentJob,jobParameters);
-            System.out.println("3");
             return ResponseEntity.ok("Payment processing started successfully");
         }
         catch(Exception e)
         {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Batch processing failed Sorry: " + e.getMessage());
         }
+    }
+    @GetMapping("/getallpayments")
+    public List<Payment> getAllPayments() {
+        return paymentService.getAllPayments();
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePayment(@PathVariable("id") long id) {

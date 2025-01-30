@@ -19,7 +19,7 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String transactionId;
-    String paymentStatus;
+    String payment_status;
     Double amount;
     String userId;
 

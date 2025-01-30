@@ -24,4 +24,7 @@ public class PaymentService {
         paymentRepository.deleteById(id);
         return ResponseEntity.ok("Payment deleted successfully");
     }
+    public List<Payment> getAllPayments() {
+        return paymentRepository.findAll();
+    }
 }
