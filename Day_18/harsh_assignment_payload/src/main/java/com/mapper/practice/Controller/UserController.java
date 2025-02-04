@@ -2,38 +2,21 @@ package com.mapper.practice.Controller;
 
 import com.mapper.practice.DTO.ExternalDto;
 import com.mapper.practice.DTO.InternalDto;
-import com.mapper.practice.Service.UserService;
+import com.mapper.practice.Service.PayloadService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 public class UserController {
-    private final UserService userService;
+    private final PayloadService payloadService;
 
-    public UserController(UserService userService) {
-        this.userService = userService;
+    public UserController(PayloadService payloadService) {
+        this.payloadService = payloadService;
     }
 
-    @GetMapping("/users")
-    public List<InternalDto> getUsers() {
-        return userService.getAllUsers();
-    }
-    @GetMapping("/user/{id}")
-    public Optional<InternalDto> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
-    }
-    @PostMapping("/adduser")
-    public InternalDto addUser(@RequestBody ExternalDto externalDto) {
-        return userService.createUser(externalDto);
-    }
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-    }
-    @PutMapping("/user/{id}")
-    public InternalDto updateUser(@PathVariable Long id, @RequestBody ExternalDto externalDto) {
-        return userService.updateUser(id, externalDto);
+    @PostMapping("/convert")
+    public ResponseEntity<InternalDto> convertToInternal(@RequestBody ExternalDto payloadExternalDTO) {
+        InternalDto paymentInternalDTO = payloadService.convertToInternal(payloadExternalDTO);
+        return ResponseEntity.ok(paymentInternalDTO);
     }
 }

@@ -1,11 +1,8 @@
 package com.SpringBatch.PaymentAuth.Learn.Controller;
 
-
 import com.SpringBatch.PaymentAuth.Learn.Model.Payment;
 import com.SpringBatch.PaymentAuth.Learn.Service.PaymentService;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,15 +14,14 @@ import java.util.List;
 @RequestMapping("/payments")
 @CrossOrigin
 public class PaymentController {
-
     private final JobLauncher jobLauncher;
-    private PaymentService paymentService;
-    private Job paymentJob;
+    private final PaymentService paymentService;
+    private final Job paymentJob;
 
-    public PaymentController(PaymentService paymentService, JobLauncher jobLauncher,Job paymentJob) {
+    public PaymentController(PaymentService paymentService, JobLauncher jobLauncher, Job paymentJob) {
         this.paymentService = paymentService;
         this.jobLauncher = jobLauncher;
-        this.paymentJob=paymentJob;
+        this.paymentJob = paymentJob;
     }
 
     @PostMapping("/process")
@@ -49,13 +45,15 @@ public class PaymentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Batch processing failed Sorry: " + e.getMessage());
         }
     }
+
     @GetMapping("/getallpayments")
     public List<Payment> getAllPayments() {
         return paymentService.getAllPayments();
     }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deletePayment(@PathVariable("id") long id) {
         paymentService.deletePayment(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Payment deleted successfully");
+        return ResponseEntity.ok("Payment deleted");
     }
 }

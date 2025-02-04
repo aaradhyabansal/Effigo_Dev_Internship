@@ -1,11 +1,13 @@
 package com.mapper.practice.DTO;
 import lombok.*;
+
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class InternalDto {
-    private Long id;
-    private String name;
-    private String email;
+    private PaymentHeaderDto paymentHeaders;
+    private List<InvoiceDto> invoices;
+    private PaymentsReqDetailsDto paymentsReqDetails;
 }

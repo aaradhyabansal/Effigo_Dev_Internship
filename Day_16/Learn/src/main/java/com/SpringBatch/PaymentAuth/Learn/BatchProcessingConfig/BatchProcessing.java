@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
 @Slf4j
@@ -99,6 +100,7 @@ public class BatchProcessing {
                 .start(paymentStep)
                 .build();
     }
+
 
     @Bean
     public ItemReadListener<Payment> readListener() {

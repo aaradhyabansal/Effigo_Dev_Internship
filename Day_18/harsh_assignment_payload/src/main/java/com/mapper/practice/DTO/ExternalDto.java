@@ -7,7 +7,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 public class ExternalDto {
    private String paymentName;
    private String pay_id;
