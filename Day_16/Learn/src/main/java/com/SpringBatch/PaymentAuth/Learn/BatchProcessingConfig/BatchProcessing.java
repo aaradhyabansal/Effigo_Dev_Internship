@@ -17,6 +17,8 @@ import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.task.SimpleAsyncTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
 @Configuration
@@ -83,6 +85,7 @@ public class BatchProcessing {
                 .reader(paymentItemReader(entityManagerFactory))
                 .processor(paymentProcessor())
                 .writer(paymentWriter())
+                .taskExecutor(taskExecutor())
                 .faultTolerant()
                 .skip(Exception.class)
                 .noRetry(Exception.class)
@@ -115,6 +118,13 @@ public class BatchProcessing {
                 System.err.println("Error while reading payment: " + ex.getMessage());
             }
         };
+    }
+
+    @Bean
+    public TaskExecutor taskExecutor() {
+        SimpleAsyncTaskExecutor simpleAsyncTaskExecutor = new SimpleAsyncTaskExecutor();
+        simpleAsyncTaskExecutor.setConcurrencyLimit(10);
+        return simpleAsyncTaskExecutor;
     }
 
 }
