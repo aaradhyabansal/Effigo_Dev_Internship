@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -52,6 +53,10 @@ public class DishController {
     @GetMapping("/{id}/restaurant")
     public List<String> getDishInRestaurant(@PathVariable long id) {
         return dishService.getDishesServedInRestaurant(id);
+    }
+    @PatchMapping("/updatep/{id}")
+    public void patchUpdateDish(@PathVariable long id, @RequestBody Map<String, Object> updates) {
+        dishService.patchUpdateDish(id, updates);
     }
 
 }

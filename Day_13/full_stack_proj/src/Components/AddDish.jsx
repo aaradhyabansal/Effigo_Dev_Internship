@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { TextField, Button, Typography, Box, Container } from "@mui/material";
-import { addNewDish, updateDish, getDishById } from "../api/FoodApi";
+import {
+  addNewDish,
+  updateDish,
+  updatePatchDish,
+  getDishById,
+} from "../api/FoodApi";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import "../css/AddNewDish.css";
@@ -10,13 +15,14 @@ const AddNewDish = () => {
   const [price, setPrice] = useState(0);
   const [description, setDescription] = useState("");
   const [restaurantId, setRestaurantId] = useState(0);
-
+  const [originalDish, setOriginalDish] = useState({});
+  const [usePut, setUsePut] = useState(false);
   const navigate = useNavigate();
-
   const { id } = useParams();
+
   useEffect(() => {
     const fetchDishDetails = async () => {
-      if (id !== -1) {
+      if (id !== "-1") {
         try {
           const response = await getDishById(id);
           const dish = response.data;
@@ -24,6 +30,7 @@ const AddNewDish = () => {
           setPrice(dish.price);
           setDescription(dish.description);
           setRestaurantId(dish.restaurant_id);
+          setOriginalDish(dish);
         } catch (error) {
           console.error("Error fetching dish details:", error);
         }
@@ -34,17 +41,27 @@ const AddNewDish = () => {
   }, [id]);
 
   async function handleOnClick() {
-    const dish = {
-      name: name,
-      description: description,
-      price: price,
-      restaurant_id: restaurantId,
-    };
-    if (id === -1) {
+    const updatedFields = {};
+
+    if (name !== originalDish.name) updatedFields.name = name;
+    if (price !== originalDish.price) updatedFields.price = price;
+    if (description !== originalDish.description)
+      updatedFields.description = description;
+    if (restaurantId !== originalDish.restaurant_id)
+      updatedFields.restaurant_id = restaurantId;
+
+    const dish = { name, description, price, restaurant_id: restaurantId };
+
+    if (id === "-1") {
       await addNewDish(dish, restaurantId);
     } else {
-      await updateDish(dish, id);
+      if (usePut) {
+        await updateDish(dish, id);
+      } else {
+        await updatePatchDish(updatedFields, id);
+      }
     }
+
     navigate("/dishes");
   }
 
@@ -54,7 +71,7 @@ const AddNewDish = () => {
         <div className="addnewdish-container">
           <StyledBox>
             <Typography variant="h5" align="center" mb={3}>
-              Add New Dish
+              {id === "-1" ? "Add New Dish" : "Edit Dish"}
             </Typography>
 
             <form>
@@ -75,7 +92,7 @@ const AddNewDish = () => {
                 margin="normal"
                 type="number"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => setPrice(Number(e.target.value))}
                 required
               />
 
@@ -98,12 +115,12 @@ const AddNewDish = () => {
                 margin="normal"
                 type="number"
                 value={restaurantId}
-                onChange={(e) => setRestaurantId(e.target.value)}
+                onChange={(e) => setRestaurantId(Number(e.target.value))}
                 required
               />
 
               <Button
-                type="submit"
+                type="button"
                 fullWidth
                 variant="contained"
                 color="primary"
@@ -112,6 +129,30 @@ const AddNewDish = () => {
               >
                 Submit
               </Button>
+
+              {/* Toggle for PUT vs PATCH */}
+              {id !== "-1" && (
+                <div>
+                  <label>
+                    <input
+                      type="radio"
+                      name="updateType"
+                      checked={usePut}
+                      onChange={() => setUsePut(true)}
+                    />
+                    Full Update (PUT)
+                  </label>
+                  <label>
+                    <input
+                      type="radio"
+                      name="updateType"
+                      checked={!usePut}
+                      onChange={() => setUsePut(false)}
+                    />
+                    Partial Update (PATCH)
+                  </label>
+                </div>
+              )}
             </form>
           </StyledBox>
         </div>
@@ -130,7 +171,7 @@ const GradientContainer = styled(Container)`
 `;
 
 const StyledBox = styled(Box)`
-  padding: 24px; /* Adjust padding for form */
+  padding: 24px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;

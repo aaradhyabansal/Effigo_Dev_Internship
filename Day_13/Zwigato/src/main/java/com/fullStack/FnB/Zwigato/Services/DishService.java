@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -47,5 +48,37 @@ public class DishService {
     public List<String> getDishesServedInRestaurant(long id) {
         System.out.println(dishRepository.findRestaurantByDishId(id));
         return dishRepository.findRestaurantByDishId(id);
+    }
+    public void patchUpdateDish(long id, Map<String, Object> updates) {
+        Optional<Dish> optionalDish = dishRepository.findById(id);
+
+        if (optionalDish.isPresent()) {
+            Dish dish = optionalDish.get();
+
+            for (Map.Entry<String, Object> entry : updates.entrySet()) {
+                String key = entry.getKey();
+                Object value = entry.getValue();
+
+                switch (key) {
+                    case "name":
+                        dish.setName((String) value);
+                        break;
+                    case "description":
+                        dish.setDescription((String) value);
+                        break;
+                    case "price":
+                        if (value instanceof Number) {
+                            dish.setPrice(((Number) value).intValue());
+                        }
+                        break;
+                    default:
+                        throw new IllegalArgumentException("Invalid field: " + key);
+                }
+            }
+
+            dishRepository.save(dish);
+        } else {
+            throw new RuntimeException("Dish not found with id: " + id);
+        }
     }
 }

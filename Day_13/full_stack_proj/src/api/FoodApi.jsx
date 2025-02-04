@@ -57,3 +57,6 @@ export function updateDish(dish, id) {
 export function getDishById(id) {
   return apiClient.get(`/dishes/${id}`);
 }
+export function updatePatchDish(updates, id) {
+  return apiClient.patch(`/dishes/updatep/${id}`, updates);
+}
