@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 
 @RestController
-
 public class GreetingsController {
 
     private final AuthenticationManager authenticationManager;
@@ -47,7 +46,7 @@ public class GreetingsController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         Authentication authentication;
-        System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaa");
+
         System.out.println(loginRequest.getUsername());
         System.out.println(loginRequest.getPassword());
         try {

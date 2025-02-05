@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./batch-processing
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:4173"
+    networks:
+      - common-network
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./Learn
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8080:8080"
+    networks:
+      - common-network
+
+networks:
+  common-network:
+    driver: bridge
