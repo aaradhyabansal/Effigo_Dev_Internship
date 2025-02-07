@@ -18,4 +18,7 @@ public class ExternalDto {
    private String transactionCode;
    private String plant;
    private String gst;
+   private String status;
 }
+
+

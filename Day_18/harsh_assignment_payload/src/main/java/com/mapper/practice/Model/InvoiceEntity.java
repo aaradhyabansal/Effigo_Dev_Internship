@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -18,10 +19,15 @@ public class InvoiceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String invoice_type;
-    private Date invoice_date;
+    private LocalDate invoice_date;
     private Double invoice_amount;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payload_id")
-    private PayloadEntity payload;
+    @JoinColumn(name = "SuccessPayload_id")
+    private SuccessfulPayloadEntity successfulPayload;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="FailedPayload_id")
+    private UnSuccessfulPayloadEntity unSuccessfulPayload;
+
 
 }

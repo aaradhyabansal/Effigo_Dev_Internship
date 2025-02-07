@@ -10,4 +10,5 @@ public class InternalDto {
     private PaymentHeaderDto paymentHeaders;
     private List<InvoiceDto> invoices;
     private PaymentsReqDetailsDto paymentsReqDetails;
+    private String status;
 }

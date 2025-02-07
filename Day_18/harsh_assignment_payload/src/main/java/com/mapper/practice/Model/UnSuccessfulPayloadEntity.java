@@ -1,8 +1,10 @@
 package com.mapper.practice.Model;
 
-import com.mapper.practice.DTO.InvoiceDto;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PayloadEntity {
+public class UnSuccessfulPayloadEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,18 +27,20 @@ public class PayloadEntity {
     private String transactionCode;
     private String plant;
     private Integer gst;
-    @OneToMany(mappedBy = "payload", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Integer status;
+    private String reason_failure;
+    @OneToMany(mappedBy = "unSuccessfulPayload", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<InvoiceEntity> invoices = new ArrayList<>();
 
 
     public void addInvoice(InvoiceEntity invoice) {
         invoices.add(invoice);
-        invoice.setPayload(this);
+        invoice.setUnSuccessfulPayload(this);
     }
 
     public void removeInvoice(InvoiceEntity invoice) {
         invoices.remove(invoice);
-        invoice.setPayload(null);
+        invoice.setUnSuccessfulPayload(null);
     }
 
 }

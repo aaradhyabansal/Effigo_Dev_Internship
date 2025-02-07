@@ -18,6 +18,7 @@ public interface PaymentMapper {
    @Mapping(source="transactionCode",target="paymentsReqDetails.transactionCode")
    @Mapping(source="plant",target="paymentsReqDetails.plant")
    @Mapping(source="gst",target="paymentsReqDetails.gst")
+   @Mapping(source="status",target="status")
     InternalDto payloadToDto(ExternalDto externalDto);
 
 

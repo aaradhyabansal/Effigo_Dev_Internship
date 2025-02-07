@@ -4,14 +4,15 @@ package com.mapper.practice.Mapper;
 import com.mapper.practice.DTO.InternalDto;
 import com.mapper.practice.DTO.InvoiceDto;
 import com.mapper.practice.Model.InvoiceEntity;
-import com.mapper.practice.Model.PayloadEntity;
+import com.mapper.practice.Model.SuccessfulPayloadEntity;
+import com.mapper.practice.Model.UnSuccessfulPayloadEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,26 +26,47 @@ public interface ConversionMapper {
             return null;
         }
         return invoices.stream()
-                .map(this::invoiceDtoToEntity)
+                .map(dto -> {
+                    InvoiceEntity entity = new InvoiceEntity();
+                    entity.setInvoice_type(dto.getInvoice_type());
+                    entity.setInvoice_amount(stringToDouble(dto.getInvoice_amount()));
+
+                    try {
+                        entity.setInvoice_date(stringToLocalDate(dto.getInvoice_date()));
+                    } catch (Exception e) {
+                        entity.setInvoice_date(null);
+                    }
+
+                    return entity;
+                })
                 .collect(Collectors.toList());
     }
 
 
     @Mapping(source = "invoice_type", target = "invoice_type")
-    @Mapping(source = "invoice_date", target = "invoice_date", qualifiedByName = "stringToDate")
+    @Mapping(source = "invoice_date", target = "invoice_date", qualifiedByName = "stringToLocalDate")
     @Mapping(source = "invoice_amount", target = "invoice_amount", qualifiedByName = "stringToDouble")
     InvoiceEntity invoiceDtoToEntity(InvoiceDto dto);
 
 
-    @Named("stringToDate")
-    default Date stringToDate(String dateStr) {
+    @Named("stringToLocalDate")
+    default LocalDate stringToLocalDate(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) {
             return null;
         }
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         try {
-            return formatter.parse(dateStr);
-        } catch (ParseException e) {
+
+            String[] parts = dateStr.split("-");
+            if (parts.length == 3) {
+                int day = Integer.parseInt(parts[0]);
+                int month = Integer.parseInt(parts[1]);
+                if (day < 1 || day > 31 || month < 1 || month > 12) {
+                    throw new RuntimeException("Invalid date format: " + dateStr);
+                }
+            }
+            return LocalDate.parse(dateStr, formatter);
+        } catch (Exception e) {
             throw new RuntimeException("Invalid date format: " + dateStr);
         }
     }
@@ -68,11 +90,24 @@ public interface ConversionMapper {
     @Mapping(target="pay_type",source="paymentHeaders.pay_type")
     @Mapping(target="paymentReceiverName",source="paymentsReqDetails.paymentReceiverName")
     @Mapping(target="amount",source="paymentsReqDetails.amount")
+    @Mapping(source = "invoices",target = "invoices",qualifiedByName ="mapInvoices")
     @Mapping(target="companyCode",source="paymentsReqDetails.companyCode")
     @Mapping(target="transactionCode",source="paymentsReqDetails.transactionCode")
     @Mapping(target="plant",source="paymentsReqDetails.plant")
     @Mapping(target="gst",source="paymentsReqDetails.gst",qualifiedByName = "stringToInteger")
-     PayloadEntity InternalDtoToEntity(InternalDto internalDto);
+    SuccessfulPayloadEntity InternalDtoToSuccessEntity(InternalDto internalDto);
+
+    @Mapping(source="paymentHeaders.paymentName",target="paymentName")
+    @Mapping(target="pay_id",source="paymentHeaders.pay_id")
+    @Mapping(target="pay_type",source="paymentHeaders.pay_type")
+    @Mapping(target="paymentReceiverName",source="paymentsReqDetails.paymentReceiverName")
+    @Mapping(target="amount",source="paymentsReqDetails.amount")
+    @Mapping(source = "invoices",target = "invoices",qualifiedByName ="mapInvoices")
+    @Mapping(target="companyCode",source="paymentsReqDetails.companyCode")
+    @Mapping(target="transactionCode",source="paymentsReqDetails.transactionCode")
+    @Mapping(target="plant",source="paymentsReqDetails.plant")
+    @Mapping(target="gst",source="paymentsReqDetails.gst",qualifiedByName = "stringToInteger")
+    UnSuccessfulPayloadEntity InternalDtoToFailedEntity(InternalDto internalDto);
 
 
     @Named("stringToInteger")
