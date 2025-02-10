@@ -1,5 +1,7 @@
 package com.mapper.practice.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +28,7 @@ public class SuccessfulPayloadEntity {
     private Integer gst;
     private Integer status;
     @OneToMany(mappedBy = "successfulPayload", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<InvoiceEntity> invoices = new ArrayList<>();
 
 

@@ -1,5 +1,6 @@
 package com.mapper.practice.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,10 +24,12 @@ public class InvoiceEntity {
     private Double invoice_amount;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SuccessPayload_id")
+    @JsonBackReference
     private SuccessfulPayloadEntity successfulPayload;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="FailedPayload_id")
+    @JsonBackReference
     private UnSuccessfulPayloadEntity unSuccessfulPayload;
 
 

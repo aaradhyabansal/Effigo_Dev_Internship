@@ -1,5 +1,7 @@
 package com.mapper.practice.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,6 +32,7 @@ public class UnSuccessfulPayloadEntity {
     private Integer status;
     private String reason_failure;
     @OneToMany(mappedBy = "unSuccessfulPayload", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<InvoiceEntity> invoices = new ArrayList<>();
 
 

@@ -13,6 +13,7 @@ import com.mapper.practice.Repository.SuccessfulPayloadRepository;
 import com.mapper.practice.Repository.UnSuccessfulPayloadRepository;
 import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,8 +21,10 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 
 @Service
@@ -144,5 +147,21 @@ public class PayloadService {
             successfulPayloadRepository.save(payloadEntity);
         }
         return internalDto;
+    }
+    @Transactional
+    public  List<SuccessfulPayloadEntity> getSuccessfulPayments()
+    {
+        System.out.println("Inside getSuccessfulPayments");
+        System.out.println(successfulPayloadRepository.findAll());
+        System.out.println("Inside getSuccessfulPayments");
+        return successfulPayloadRepository.findAll();
+    }
+    @Transactional
+    public  List<UnSuccessfulPayloadEntity> getUnSuccessfulPayments()
+    {
+        System.out.println("Inside getUnSuccessfulPayments");
+        System.out.println( unSuccessfulPayloadRepository.findAll());
+        System.out.println("Inside getUnSuccessfulPayments");
+        return unSuccessfulPayloadRepository.findAll();
     }
 }
