@@ -17,6 +17,7 @@ function AddTransaction() {
   const [transactionCode, setTransactionCode] = useState("");
   const [plant, setPlant] = useState("");
   const [gst, setGst] = useState("");
+  const [status, setStatus] = useState("");
   const [transactions, setTransactions] = useState([]);
 
   const navigate = useNavigate();
@@ -42,11 +43,12 @@ function AddTransaction() {
       transactionCode,
       plant,
       gst,
+      status,
     };
 
-    const updatedTransactions = [...transactions, newPayment];
+    const updatedTransactions = newPayment;
     setTransactions(updatedTransactions);
-
+    console.log(updatedTransactions);
     await addtransactions(updatedTransactions);
     navigate("/home");
   }
@@ -76,6 +78,13 @@ function AddTransaction() {
               placeholder="Payment Type"
               value={pay_type}
               onChange={(e) => setPay_type(e.target.value)}
+              required
+            />
+            <StyledInput
+              type="text"
+              placeholder="Status"
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
               required
             />
           </StyledGrid>

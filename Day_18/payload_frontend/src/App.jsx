@@ -1,5 +1,5 @@
 import { BrowserRouter } from "react-router-dom";
-import Payload from "./Payload_App/payload";
+import Payload from "./Payload_App/Payload";
 
 function App() {
   return (

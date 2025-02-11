@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import CustomNavbar from "../Components/Navbar";
-import Homepage from "../Components/HomePage";
+import Homepage from "../Components/Homepage";
 import SuccessPayments from "../Components/SuccessPayments";
 import FailedPayments from "../Components/FailedPayments";
 import AddTransaction from "../Components/AddTransaction";

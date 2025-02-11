@@ -13,7 +13,7 @@ export function getfailedPayments() {
 }
 
 export function addtransactions(transaction) {
-  return apiClient.post("/payments/convert", transaction);
+  return apiClient.post("/convert", transaction);
 }
 
 export function deletetransactions(id) {
