@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { deleteRestaurantById } from "../api/FoodApi";
-import "../css/Card.css";
 
 const Card = ({ name, id }) => {
   const navigate = useNavigate();
@@ -20,91 +19,91 @@ const Card = ({ name, id }) => {
 
   return (
     <StyledWrapper>
-      <div className="card">
-        <p className="heading">{name}</p>
-      </div>
-      <div className="d-flex">
-        <button onClick={() => handleCardClick(id)}>Click</button>
-        <button onClick={() => handleCardUpdate(id)}>Update</button>
-        <button onClick={() => handleCardDelete(id)}>Delete</button>
-      </div>
+      <CardContainer onClick={() => handleCardClick(id)}>
+        <CardTitle>{name}</CardTitle>
+      </CardContainer>
+      <ButtonGroup>
+        <ActionButton onClick={() => handleCardClick(id)}>View</ActionButton>
+        <ActionButton onClick={() => handleCardUpdate(id)}>Edit</ActionButton>
+        <DeleteButton onClick={() => handleCardDelete(id)}>Delete</DeleteButton>
+      </ButtonGroup>
     </StyledWrapper>
   );
 };
 
+// 🌟 Main Wrapper for Layout
 const StyledWrapper = styled.div`
-  .card {
-    position: relative;
-    width: 190px;
-    height: 254px;
-    background-color: #000;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 12px;
-    gap: 12px;
-    border-radius: 8px;
-    cursor: pointer;
-  }
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+`;
 
-  .card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    left: -5px;
-    margin: auto;
-    width: 200px;
-    height: 264px;
-    border-radius: 10px;
-    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
-    z-index: -10;
-    pointer-events: none;
-    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  }
+// 🌟 Themed Card Container with Light Shade
+const CardContainer = styled.div`
+  position: relative;
+  width: 220px;
+  height: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.25),
+    rgba(230, 230, 230, 0.7)
+  );
+  backdrop-filter: blur(10px);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 
-  .card::after {
-    content: "";
-    z-index: -1;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
-    transform: translate3d(0, 0, 0) scale(0.95);
-    filter: blur(20px);
-  }
-
-  .heading {
-    font-size: 20px;
-    text-transform: capitalize;
-    font-weight: 700;
-    color: white;
-    text-align: center;
-  }
-
-  .card:hover::after {
-    filter: blur(30px);
-  }
-
-  .card:hover::before {
-    transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
-  }
-
-  button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 10px 20px;
-    background: linear-gradient(-45deg, #e81cff, #40c9ff);
-    color: white;
-    border: none;
-    border-radius: 5px;
-    text-align: center;
-    cursor: pointer;
-    transition: transform 0.2s, background 0.2s ease-in-out;
-  }
-
-  button:hover {
+  &:hover {
     transform: scale(1.05);
-    background: linear-gradient(-45deg, #fc00ff, #00dbde);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+  }
+`;
+
+// 🌟 Text inside the card (with contrast)
+const CardTitle = styled.p`
+  font-size: 22px;
+  font-weight: bold;
+  color: #2c2c2c;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);
+`;
+
+// 🌟 Button Group for Actions
+const ButtonGroup = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+// 🌟 Themed Buttons
+const ActionButton = styled.button`
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  background: linear-gradient(-45deg, #ff9a9e, #fad0c4);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s ease-in-out;
+
+  &:hover {
+    transform: scale(1.05);
+    background: linear-gradient(-45deg, #fad0c4, #ff9a9e);
+  }
+`;
+
+// 🌟 Delete Button (Slightly Different for Warning)
+const DeleteButton = styled(ActionButton)`
+  background: linear-gradient(-45deg, #ff4b4b, #ff7979);
+
+  &:hover {
+    background: linear-gradient(-45deg, #ff7979, #ff4b4b);
   }
 `;
 

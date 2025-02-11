@@ -11,60 +11,62 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/zwigato.png"; // ✅ Corrected image import
 
 const pages = [
   { name: "Dishes", path: "/dishes" },
   { name: "Add Dish", path: "/dishes/addnewdish/-1" },
 ];
+
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar({ toggleTheme, isDarkTheme }) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate();
 
-  const navigate = useNavigate(); // Initialize navigate
+  // ✅ Soft pastel button style
+  const buttonStyle = React.useMemo(
+    () => ({
+      padding: "10px 18px",
+      borderRadius: "8px",
+      cursor: "pointer",
+      transition: "all 0.3s ease",
+      background: "linear-gradient(135deg, #FFD3B6, #FFAAA5, #D5AAFF, #85E3FF)",
+      color: "#333",
+      fontWeight: "bold",
+      border: "none",
+      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+      "&:hover": {
+        transform: "scale(1.05)",
+        boxShadow: "0px 6px 12px rgba(0, 0, 0, 0.2)",
+      },
+    }),
+    []
+  );
 
-  const buttonStyle = {
-    padding: "8px 16px",
-    backgroundColor: isDarkTheme ? "#ffffff" : "#121212",
-    color: isDarkTheme ? "#121212" : "#ffffff",
-    border: "none",
-    borderRadius: "4px",
-    cursor: "pointer",
-    marginLeft: "16px",
-    transition: "all 0.3s ease",
-    background: "linear-gradient(-45deg, #00dbde, #fc00ff)",
-  };
-
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
-  };
+  const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
+  const handleOpenUserMenu = (event) => setAnchorElUser(event.currentTarget);
+  const handleCloseNavMenu = () => setAnchorElNav(null);
+  const handleCloseUserMenu = () => setAnchorElUser(null);
 
   const handleNavigate = (path) => {
-    navigate(path); // Navigate to the desired path
+    navigate(path);
     handleCloseNavMenu();
   };
 
   return (
     <AppBar
       position="static"
-      sx={{ background: "linear-gradient(-45deg, #00dbde, #fc00ff)" }}
+      sx={{
+        background:
+          "linear-gradient(135deg, #FFD3B6, #FFAAA5, #D5AAFF, #85E3FF)",
+      }}
     >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
+          {/* ✅ Logo with proper sizing */}
           <IconButton
             edge="start"
             color="inherit"
@@ -72,64 +74,53 @@ function NavBar({ toggleTheme, isDarkTheme }) {
             sx={{ mr: 2 }}
           >
             <img
-              src="src/assets/zwigato.png" // Path to your logo
+              src={logo}
               alt="Logo"
-              style={{ width: "90px", height: "90px" }} // Adjust as needed
+              style={{ width: "70px", height: "70px" }}
             />
           </IconButton>
+
+          {/* ✅ Title Clickable - Navigates to Home */}
           <Typography
             variant="h6"
-            noWrap
             component="div"
-            onClick={() => navigate("/restaurants")} // Navigate to /restaurants on click
+            onClick={() => navigate("/restaurants")}
             sx={{
               mr: 2,
               display: { xs: "none", md: "flex" },
               fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
+              letterSpacing: ".2rem",
+              color: "#333",
               textDecoration: "none",
-              cursor: "pointer", // Makes it visually clear it's clickable
+              cursor: "pointer",
             }}
           >
             Zwigato
           </Typography>
 
+          {/* ✅ Mobile Navigation Menu */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="menu"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
               onClick={handleOpenNavMenu}
               color="inherit"
             >
               <MenuIcon />
             </IconButton>
             <Menu
-              id="menu-appbar"
               anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
+              anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              transformOrigin={{ vertical: "top", horizontal: "left" }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: "block", md: "none" } }}
-              className="g-3"
             >
               {pages.map((page) => (
                 <MenuItem
                   key={page.name}
                   onClick={() => handleNavigate(page.path)}
                 >
-                  <Typography sx={{ textAlign: "center" }}>
+                  <Typography sx={{ textAlign: "center", color: "#333" }}>
                     {page.name}
                   </Typography>
                 </MenuItem>
@@ -137,6 +128,7 @@ function NavBar({ toggleTheme, isDarkTheme }) {
             </Menu>
           </Box>
 
+          {/* ✅ Desktop Navigation */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
@@ -144,9 +136,16 @@ function NavBar({ toggleTheme, isDarkTheme }) {
                 onClick={() => handleNavigate(page.path)}
                 sx={{
                   my: 2,
-                  color: "white",
-                  display: "block",
-                  background: "linear-gradient(-45deg, #00dbde, #fc00ff)",
+                  color: "#333",
+                  fontWeight: "bold",
+                  background: "linear-gradient(135deg, #FFD3B6, #FFAAA5)",
+                  borderRadius: "8px",
+                  marginRight: "10px",
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                  "&:hover": {
+                    background: "linear-gradient(135deg, #D5AAFF, #85E3FF)",
+                    transform: "scale(1.05)",
+                  },
                 }}
               >
                 {page.name}
@@ -154,6 +153,7 @@ function NavBar({ toggleTheme, isDarkTheme }) {
             ))}
           </Box>
 
+          {/* ✅ User Avatar & Menu */}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -162,30 +162,24 @@ function NavBar({ toggleTheme, isDarkTheme }) {
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}
-              id="menu-appbar"
               anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
+              anchorOrigin={{ vertical: "top", horizontal: "right" }}
+              transformOrigin={{ vertical: "top", horizontal: "right" }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: "center" }}>
+                  <Typography sx={{ textAlign: "center", color: "#333" }}>
                     {setting}
                   </Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <Button style={buttonStyle} onClick={toggleTheme}>
+
+          {/* ✅ Theme Toggle Button */}
+          <Button sx={buttonStyle} onClick={toggleTheme}>
             {isDarkTheme ? "Light Theme" : "Dark Theme"}
           </Button>
         </Toolbar>

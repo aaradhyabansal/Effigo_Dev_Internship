@@ -1,5 +1,17 @@
 import { useState, useEffect } from "react";
-import { TextField, Button, Typography, Box, Container } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Container,
+  CircularProgress,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+} from "@mui/material";
 import {
   addNewDish,
   updateDish,
@@ -8,7 +20,6 @@ import {
 } from "../api/FoodApi";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
-import "../css/AddNewDish.css";
 
 const AddNewDish = () => {
   const [name, setName] = useState("");
@@ -17,12 +28,14 @@ const AddNewDish = () => {
   const [restaurantId, setRestaurantId] = useState(0);
   const [originalDish, setOriginalDish] = useState({});
   const [usePut, setUsePut] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
 
   useEffect(() => {
     const fetchDishDetails = async () => {
       if (id !== "-1") {
+        setLoading(true);
         try {
           const response = await getDishById(id);
           const dish = response.data;
@@ -33,6 +46,9 @@ const AddNewDish = () => {
           setOriginalDish(dish);
         } catch (error) {
           console.error("Error fetching dish details:", error);
+          alert("Failed to load dish details. Please try again.");
+        } finally {
+          setLoading(false);
         }
       }
     };
@@ -41,139 +57,152 @@ const AddNewDish = () => {
   }, [id]);
 
   async function handleOnClick() {
-    const updatedFields = {};
+    try {
+      const updatedFields = {};
 
-    if (name !== originalDish.name) updatedFields.name = name;
-    if (price !== originalDish.price) updatedFields.price = price;
-    if (description !== originalDish.description)
-      updatedFields.description = description;
-    if (restaurantId !== originalDish.restaurant_id)
-      updatedFields.restaurant_id = restaurantId;
+      if (name !== originalDish.name) updatedFields.name = name;
+      if (price !== originalDish.price) updatedFields.price = price;
+      if (description !== originalDish.description)
+        updatedFields.description = description;
+      if (restaurantId !== originalDish.restaurant_id)
+        updatedFields.restaurant_id = restaurantId;
 
-    const dish = { name, description, price, restaurant_id: restaurantId };
+      const dish = { name, description, price, restaurant_id: restaurantId };
 
-    if (id === "-1") {
-      await addNewDish(dish, restaurantId);
-    } else {
-      if (usePut) {
-        await updateDish(dish, id);
+      if (id === "-1") {
+        await addNewDish(dish, restaurantId);
       } else {
-        await updatePatchDish(updatedFields, id);
+        usePut
+          ? await updateDish(dish, id)
+          : await updatePatchDish(updatedFields, id);
       }
-    }
 
-    navigate("/dishes");
+      navigate("/dishes");
+    } catch (error) {
+      console.error("Error saving dish:", error);
+      alert("Failed to save dish. Please try again.");
+    }
   }
 
   return (
-    <div className="addnewdish-container">
-      <GradientContainer>
-        <div className="addnewdish-container">
-          <StyledBox>
-            <Typography variant="h5" align="center" mb={3}>
-              {id === "-1" ? "Add New Dish" : "Edit Dish"}
-            </Typography>
+    <PastelContainer>
+      <StyledBox>
+        <Typography variant="h5" align="center" mb={3}>
+          {id === "-1" ? "Add New Dish" : "Edit Dish"}
+        </Typography>
 
-            <form>
-              <TextField
-                fullWidth
-                label="Dish Name"
-                variant="outlined"
-                margin="normal"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-              />
+        {loading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            height="200px"
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <form>
+            <TextField
+              fullWidth
+              label="Dish Name"
+              variant="outlined"
+              margin="normal"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+            />
 
-              <TextField
-                fullWidth
-                label="Price"
-                variant="outlined"
-                margin="normal"
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(Number(e.target.value))}
-                required
-              />
+            <TextField
+              fullWidth
+              label="Price"
+              variant="outlined"
+              margin="normal"
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(Number(e.target.value))}
+              required
+            />
 
-              <TextField
-                fullWidth
-                label="Description"
-                variant="outlined"
-                margin="normal"
-                multiline
-                rows={4}
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                required
-              />
+            <TextField
+              fullWidth
+              label="Description"
+              variant="outlined"
+              margin="normal"
+              multiline
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+            />
 
-              <TextField
-                fullWidth
-                label="Restaurant ID"
-                variant="outlined"
-                margin="normal"
-                type="number"
-                value={restaurantId}
-                onChange={(e) => setRestaurantId(Number(e.target.value))}
-                required
-              />
+            <TextField
+              fullWidth
+              label="Restaurant ID"
+              variant="outlined"
+              margin="normal"
+              type="number"
+              value={restaurantId}
+              onChange={(e) =>
+                setRestaurantId(Math.max(0, Number(e.target.value)))
+              }
+              required
+            />
 
-              <Button
-                type="button"
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={{ mt: 3 }}
-                onClick={handleOnClick}
-              >
-                Submit
-              </Button>
+            <Button
+              type="button"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, bgcolor: "#a8dadc", color: "#1d3557" }}
+              onClick={handleOnClick}
+            >
+              Submit
+            </Button>
 
-              {/* Toggle for PUT vs PATCH */}
-              {id !== "-1" && (
-                <div>
-                  <label>
-                    <input
-                      type="radio"
-                      name="updateType"
-                      checked={usePut}
-                      onChange={() => setUsePut(true)}
-                    />
-                    Full Update (PUT)
-                  </label>
-                  <label>
-                    <input
-                      type="radio"
-                      name="updateType"
-                      checked={!usePut}
-                      onChange={() => setUsePut(false)}
-                    />
-                    Partial Update (PATCH)
-                  </label>
-                </div>
-              )}
-            </form>
-          </StyledBox>
-        </div>
-      </GradientContainer>
-    </div>
+            {/* Toggle for PUT vs PATCH */}
+            {id !== "-1" && (
+              <FormControl component="fieldset" sx={{ mt: 3 }}>
+                <FormLabel component="legend">Update Type</FormLabel>
+                <RadioGroup
+                  value={usePut}
+                  onChange={(e) => setUsePut(e.target.value === "true")}
+                >
+                  <FormControlLabel
+                    value={true}
+                    control={<Radio />}
+                    label="Full Update (PUT)"
+                  />
+                  <FormControlLabel
+                    value={false}
+                    control={<Radio />}
+                    label="Partial Update (PATCH)"
+                  />
+                </RadioGroup>
+              </FormControl>
+            )}
+          </form>
+        )}
+      </StyledBox>
+    </PastelContainer>
   );
 };
 
-const GradientContainer = styled(Container)`
-  background: linear-gradient(-45deg, #00dbde, #fc00ff);
+// 🎨 Styled Components for Pastel Theme
+const PastelContainer = styled(Container)`
+  background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+  color: #1d3557;
 `;
 
 const StyledBox = styled(Box)`
   padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  max-width: 500px;
+  width: 100%;
 `;
 
 export default AddNewDish;

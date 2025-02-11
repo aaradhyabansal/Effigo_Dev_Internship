@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { getAllRestaurants } from "../api/FoodApi";
 import Card from "./Card";
-import "../css/RestaurantList.css";
+import styled from "styled-components";
 
 const RestaurantList = () => {
   const [restaurants, setRestaurants] = useState([]);
@@ -20,12 +20,22 @@ const RestaurantList = () => {
   }, []);
 
   return (
-    <div className="restaurant-list">
+    <StyledContainer>
       {restaurants.map((restaurant) => (
         <Card key={restaurant.id} name={restaurant.name} id={restaurant.id} />
       ))}
-    </div>
+    </StyledContainer>
   );
 };
+
+const StyledContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px; /* Ensures spacing */
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+`;
 
 export default RestaurantList;

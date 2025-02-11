@@ -53,76 +53,101 @@ const Dishes = () => {
   };
 
   return (
-    <div className="dishes-container">
-      <StyledContainer>
-        <Typography variant="h4" align="center" gutterBottom>
-          All Dishes
-        </Typography>
-        <TableContainer
-          component={Paper}
-          style={{ background: "rgba(255, 255, 255, 0.8)" }}
-        >
-          <Table aria-label="dishes table">
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell>Description</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Restaurant ID</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {dishes.length > 0 ? (
-                dishes.map((dish) => (
-                  <TableRow key={dish.id}>
-                    <TableCell>{dish.id}</TableCell>
-                    <TableCell>{dish.description}</TableCell>
-                    <TableCell>{dish.name}</TableCell>
-                    <TableCell>{dish.price}</TableCell>
-                    <TableCell>{dish.restaurant_id}</TableCell>
-                    <TableCell>
-                      <Box display="flex" gap={1}>
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          size="small"
-                          onClick={() => handleUpdate(dish.id)}
-                        >
-                          Update
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="secondary"
-                          size="small"
-                          onClick={() => handleDelete(dish.id)}
-                        >
-                          Delete
-                        </Button>
-                      </Box>
-                    </TableCell>
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    Loading or no data available
+    <StyledContainer>
+      <Typography variant="h4" align="center" gutterBottom>
+        🍽️ All Dishes
+      </Typography>
+      <TableContainer
+        component={Paper}
+        sx={{
+          background: "rgba(255, 255, 255, 0.9)",
+          borderRadius: "12px",
+          boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
+        }}
+      >
+        <Table aria-label="dishes table">
+          <TableHead>
+            <TableRow
+              sx={{ background: "linear-gradient(135deg, #FFD3B6, #D5AAFF)" }}
+            >
+              <StyledTableCell>ID</StyledTableCell>
+              <StyledTableCell>Description</StyledTableCell>
+              <StyledTableCell>Name</StyledTableCell>
+              <StyledTableCell>Price</StyledTableCell>
+              <StyledTableCell>Restaurant ID</StyledTableCell>
+              <StyledTableCell>Actions</StyledTableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {dishes.length > 0 ? (
+              dishes.map((dish) => (
+                <StyledTableRow key={dish.id}>
+                  <TableCell>{dish.id}</TableCell>
+                  <TableCell>{dish.description}</TableCell>
+                  <TableCell>{dish.name}</TableCell>
+                  <TableCell>{dish.price}</TableCell>
+                  <TableCell>{dish.restaurant_id}</TableCell>
+                  <TableCell>
+                    <Box display="flex" gap={1}>
+                      <StyledButton onClick={() => handleUpdate(dish.id)}>
+                        Update
+                      </StyledButton>
+                      <StyledDeleteButton onClick={() => handleDelete(dish.id)}>
+                        Delete
+                      </StyledDeleteButton>
+                    </Box>
                   </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </StyledContainer>
-    </div>
+                </StyledTableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} align="center">
+                  Loading or no data available
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </StyledContainer>
   );
 };
 
+// ✅ Styled components for pastel look
 const StyledContainer = styled(Container)`
-  background: linear-gradient(-45deg, #00dbde, #fc00ff);
+  background: linear-gradient(135deg, #ffd3b6, #d5aaff, #85e3ff);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+`;
+
+const StyledTableCell = styled(TableCell)`
+  font-weight: bold;
+  color: #333;
+`;
+
+const StyledTableRow = styled(TableRow)`
+  &:hover {
+    background: rgba(255, 213, 182, 0.4);
+  }
+`;
+
+const StyledButton = styled(Button)`
+  background: linear-gradient(135deg, #85e3ff, #d5aaff);
   color: white;
-  padding: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  padding: 6px 12px;
+  &:hover {
+    background: linear-gradient(135deg, #d5aaff, #ffaaa5);
+  }
+`;
+
+const StyledDeleteButton = styled(StyledButton)`
+  background: linear-gradient(135deg, #ffaaa5, #ffd3b6);
+  &:hover {
+    background: linear-gradient(135deg, #ffd3b6, #85e3ff);
+  }
 `;
 
 export default Dishes;

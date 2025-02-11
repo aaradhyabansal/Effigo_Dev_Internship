@@ -68,7 +68,7 @@ public class PayloadService {
             statusVal=0;
         for (int i = 0; i < n; i++) {
             char ch = status.charAt(i);
-            if((int)ch<30 || (int)ch>39)
+            if((int)ch<48 || (int)ch>57)
             {
                 flag=1;
                 break;
