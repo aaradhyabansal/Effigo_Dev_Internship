@@ -151,17 +151,17 @@ public class PayloadService {
     @Transactional
     public  List<SuccessfulPayloadEntity> getSuccessfulPayments()
     {
-        System.out.println("Inside getSuccessfulPayments");
+
         System.out.println(successfulPayloadRepository.findAll());
-        System.out.println("Inside getSuccessfulPayments");
+
         return successfulPayloadRepository.findAll();
     }
     @Transactional
     public  List<UnSuccessfulPayloadEntity> getUnSuccessfulPayments()
     {
-        System.out.println("Inside getUnSuccessfulPayments");
+
         System.out.println( unSuccessfulPayloadRepository.findAll());
-        System.out.println("Inside getUnSuccessfulPayments");
+
         return unSuccessfulPayloadRepository.findAll();
     }
 }

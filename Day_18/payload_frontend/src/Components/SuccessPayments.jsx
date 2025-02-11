@@ -13,11 +13,16 @@ import {
 } from "@mui/material";
 import styled from "styled-components";
 import { getsuccessfulPayments } from "../Api/Paymentsapi";
+import Pagination from "./Pagination";
 
-const FailedPayments = () => {
+const SuccessPayments = () => {
   const [payments, setPayments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [paymentsPerPage, setPaymentsPerPage] = useState(10);
   const [selectedInvoices, setSelectedInvoices] = useState([]);
   const [showInvoiceOverlay, setShowInvoiceOverlay] = useState(false);
+  const lastPage = currentPage * paymentsPerPage;
+  const firstPage = lastPage - paymentsPerPage;
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -32,7 +37,8 @@ const FailedPayments = () => {
     };
     fetchPayments();
   }, []);
-
+  const currentPages = payments.slice(firstPage, lastPage);
+  const totalPayments = payments.length;
   const handleViewInvoices = (invoices) => {
     setSelectedInvoices(invoices);
     setShowInvoiceOverlay(true);
@@ -43,116 +49,126 @@ const FailedPayments = () => {
   };
 
   return (
-    <StyledContainer>
-      <Typography variant="h4" align="center" gutterBottom>
-        All Transactions
-      </Typography>
+    <>
+      <StyledContainer>
+        <Typography variant="h4" align="center" gutterBottom>
+          All Transactions
+        </Typography>
 
-      {/* Overlay for Invoices */}
-      {showInvoiceOverlay && (
-        <Overlay>
-          <InvoiceContainer>
-            <Typography variant="h5" align="center" gutterBottom>
-              Invoices
-            </Typography>
-            <Table>
-              <TableHead>
-                <StyledTableRow>
-                  <StyledTableCell>ID</StyledTableCell>
-                  <StyledTableCell>Invoice Amount</StyledTableCell>
-                  <StyledTableCell>Invoice Date</StyledTableCell>
-                  <StyledTableCell>Invoice Type</StyledTableCell>
-                </StyledTableRow>
-              </TableHead>
-              <TableBody>
-                {selectedInvoices.map((invoice) => (
-                  <StyledTableRow key={invoice.id}>
-                    <StyledTableCell>{invoice.id}</StyledTableCell>
-                    <StyledTableCell>{invoice.invoice_amount}</StyledTableCell>
-                    <StyledTableCell>
-                      {invoice.invoice_date || "N/A"}
-                    </StyledTableCell>
-                    <StyledTableCell>{invoice.invoice_type}</StyledTableCell>
+        {/* Overlay for Invoices */}
+        {showInvoiceOverlay && (
+          <Overlay>
+            <InvoiceContainer>
+              <Typography variant="h5" align="center" gutterBottom>
+                Invoices
+              </Typography>
+              <Table>
+                <TableHead>
+                  <StyledTableRow>
+                    <StyledTableCell>ID</StyledTableCell>
+                    <StyledTableCell>Invoice Amount</StyledTableCell>
+                    <StyledTableCell>Invoice Date</StyledTableCell>
+                    <StyledTableCell>Invoice Type</StyledTableCell>
                   </StyledTableRow>
-                ))}
-                <StyledTableRow>
-                  <StyledTableCell colSpan={4} align="center">
-                    <StyledButton onClick={handleHideInvoices}>
-                      Hide
-                    </StyledButton>
-                  </StyledTableCell>
-                </StyledTableRow>
-              </TableBody>
-            </Table>
-          </InvoiceContainer>
-        </Overlay>
-      )}
+                </TableHead>
+                <TableBody>
+                  {selectedInvoices.map((invoice) => (
+                    <StyledTableRow key={invoice.id}>
+                      <StyledTableCell>{invoice.id}</StyledTableCell>
+                      <StyledTableCell>
+                        {invoice.invoice_amount}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        {invoice.invoice_date || "N/A"}
+                      </StyledTableCell>
+                      <StyledTableCell>{invoice.invoice_type}</StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                  <StyledTableRow>
+                    <StyledTableCell colSpan={4} align="center">
+                      <StyledButton onClick={handleHideInvoices}>
+                        Hide
+                      </StyledButton>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                </TableBody>
+              </Table>
+            </InvoiceContainer>
+          </Overlay>
+        )}
 
-      {/* Transactions Table */}
-      <TableContainer
-        component={Paper}
-        className={`pastel-card highlight-card ${
-          showInvoiceOverlay ? "blurred" : ""
-        }`}
-      >
-        <Table aria-label="transactions table">
-          <TableHead>
-            <StyledTableRow>
-              <StyledTableCell>ID</StyledTableCell>
-              <StyledTableCell>Transaction Code</StyledTableCell>
-              <StyledTableCell>Company Code</StyledTableCell>
-              <StyledTableCell>GST</StyledTableCell>
-              <StyledTableCell>Payment Id</StyledTableCell>
-              <StyledTableCell>Payment Type</StyledTableCell>
-              <StyledTableCell>Payment Name</StyledTableCell>
-              <StyledTableCell>Payment Receiver Name</StyledTableCell>
-              <StyledTableCell>Plant</StyledTableCell>
-              <StyledTableCell>Status Code</StyledTableCell>
-              <StyledTableCell>Amount</StyledTableCell>
-              <StyledTableCell>Invoices</StyledTableCell>
-              <StyledTableCell>Action</StyledTableCell>
-            </StyledTableRow>
-          </TableHead>
-          <TableBody>
-            {payments.length > 0 ? (
-              payments.map((payment) => (
-                <StyledTableRow key={payment.id}>
-                  <StyledTableCell>{payment.id}</StyledTableCell>
-                  <StyledTableCell>{payment.transactionCode}</StyledTableCell>
-                  <StyledTableCell>{payment.companyCode}</StyledTableCell>
-                  <StyledTableCell>{payment.gst}</StyledTableCell>
-                  <StyledTableCell>{payment.pay_id}</StyledTableCell>
-                  <StyledTableCell>{payment.pay_type}</StyledTableCell>
-                  <StyledTableCell>{payment.paymentName}</StyledTableCell>
-                  <StyledTableCell>
-                    {payment.paymentReceiverName}
-                  </StyledTableCell>
-                  <StyledTableCell>{payment.plant}</StyledTableCell>
-                  <StyledTableCell>{payment.status}</StyledTableCell>
-                  <StyledTableCell>{payment.amount}</StyledTableCell>
-                  <StyledTableCell>
-                    <StyledButton
-                      onClick={() => handleViewInvoices(payment.invoices)}
-                    >
-                      View Invoices
-                    </StyledButton>
-                  </StyledTableCell>
-                  <StyledTableCell>
-                    <StyledButton>Delete</StyledButton>
+        {/* Transactions Table */}
+        <TableContainer
+          component={Paper}
+          className={`pastel-card highlight-card ${
+            showInvoiceOverlay ? "blurred" : ""
+          }`}
+        >
+          <Table aria-label="transactions table">
+            <TableHead>
+              <StyledTableRow>
+                <StyledTableCell>ID</StyledTableCell>
+                <StyledTableCell>Transaction Code</StyledTableCell>
+                <StyledTableCell>Company Code</StyledTableCell>
+                <StyledTableCell>GST</StyledTableCell>
+                <StyledTableCell>Payment Id</StyledTableCell>
+                <StyledTableCell>Payment Type</StyledTableCell>
+                <StyledTableCell>Payment Name</StyledTableCell>
+                <StyledTableCell>Payment Receiver Name</StyledTableCell>
+                <StyledTableCell>Plant</StyledTableCell>
+                <StyledTableCell>Status Code</StyledTableCell>
+                <StyledTableCell>Amount</StyledTableCell>
+                <StyledTableCell>Invoices</StyledTableCell>
+                <StyledTableCell>Action</StyledTableCell>
+              </StyledTableRow>
+            </TableHead>
+            <TableBody>
+              {currentPages.length > 0 ? (
+                currentPages.map((payment) => (
+                  <StyledTableRow key={payment.id}>
+                    <StyledTableCell>{payment.id}</StyledTableCell>
+                    <StyledTableCell>{payment.transactionCode}</StyledTableCell>
+                    <StyledTableCell>{payment.companyCode}</StyledTableCell>
+                    <StyledTableCell>{payment.gst}</StyledTableCell>
+                    <StyledTableCell>{payment.pay_id}</StyledTableCell>
+                    <StyledTableCell>{payment.pay_type}</StyledTableCell>
+                    <StyledTableCell>{payment.paymentName}</StyledTableCell>
+                    <StyledTableCell>
+                      {payment.paymentReceiverName}
+                    </StyledTableCell>
+                    <StyledTableCell>{payment.plant}</StyledTableCell>
+                    <StyledTableCell>{payment.status}</StyledTableCell>
+                    <StyledTableCell>{payment.amount}</StyledTableCell>
+                    <StyledTableCell>
+                      <StyledButton
+                        onClick={() => handleViewInvoices(payment.invoices)}
+                      >
+                        View Invoices
+                      </StyledButton>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <StyledButton>Delete</StyledButton>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ) : (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={14} align="center">
+                    Loading or no data available
                   </StyledTableCell>
                 </StyledTableRow>
-              ))
-            ) : (
-              <StyledTableRow>
-                <StyledTableCell colSpan={14} align="center">
-                  Loading or no data available
-                </StyledTableCell>
-              </StyledTableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </StyledContainer>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </StyledContainer>
+      <Pagination
+        totalPayments={totalPayments}
+        paymentsPerPage={paymentsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
+    </>
   );
 };
 
@@ -221,4 +237,4 @@ const TableContainerBlur = styled(TableContainer)`
   }
 `;
 
-export default FailedPayments;
+export default SuccessPayments;
