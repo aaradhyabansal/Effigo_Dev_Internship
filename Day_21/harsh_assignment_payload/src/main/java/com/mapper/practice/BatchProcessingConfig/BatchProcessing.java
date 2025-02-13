@@ -17,6 +17,7 @@ import org.springframework.batch.core.ItemReadListener;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -63,31 +64,36 @@ public class BatchProcessing {
 
 
     @Component
+    @StepScope
     public class PaymentReader implements ItemReader<ExternalDto> {
-
         private Iterator<ExternalDto> paymentIterator;
-
+        private boolean initialized = false;
 
         @Override
         public ExternalDto read() {
-            if (paymentIterator == null || !paymentIterator.hasNext()) {
+            if (!initialized) {
                 List<ExternalDto> payments = payloadService.getPaymentsToProcess();
                 if (payments.isEmpty()) {
                     return null;
                 }
                 this.paymentIterator = payments.iterator();
+                initialized = true;
             }
+
             return paymentIterator.hasNext() ? paymentIterator.next() : null;
         }
     }
 
 
 
+
     @Bean
     public ItemProcessor<ExternalDto, ValidationState> paymentProcessor() {
+        System.out.println("Inside Processor");
+
         return payment -> {
             try {
-
+                System.out.println(payment);
                 log.info("al payments values defined : {}",payment);
                 return payloadService.convertToInternal(payment);
             } catch (Exception e) {
@@ -99,6 +105,7 @@ public class BatchProcessing {
 
     @Bean
     public ItemWriter<ValidationState> paymentWriter() {
+        System.out.println("Inside writer");
 
         return payments -> {
             for(ValidationState payment: payments) {

@@ -186,4 +186,14 @@ public class PayloadService {
 
         return unSuccessfulPayloadRepository.findAll();
     }
+
+    public void deleteUnTransactionById(long id)
+    {
+        unSuccessfulPayloadRepository.deleteById(id);
+    }
+    public void deleteSuTransactionById(long id)
+    {
+        successfulPayloadRepository.deleteById(id);
+    }
+
 }
