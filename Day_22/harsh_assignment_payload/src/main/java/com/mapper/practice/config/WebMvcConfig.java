@@ -25,8 +25,9 @@ import javax.sql.DataSource;
 
 @Configuration
 public class WebMvcConfig {
+
     @Autowired
-    DataSource dataSource;
+    private DataSource dataSource;
 
     @Autowired
     private AuthEntryPointJwt unauthorizedHandler;
@@ -37,27 +38,18 @@ public class WebMvcConfig {
     }
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests.requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/signin").permitAll()
-                        .anyRequest().authenticated());
-        http.sessionManagement(
-                session ->
-                        session.sessionCreationPolicy(
-                                SessionCreationPolicy.STATELESS)
-        );
-        http.exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler));
-        //http.httpBasic(withDefaults());
-        http.headers(headers -> headers
-                .frameOptions(frameOptions -> frameOptions
-                        .sameOrigin()
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Disable CSRF for API security
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .requestMatchers("/payments/signin", "/payments/signup").permitAll() // Ensure correct login path
+                        .anyRequest().authenticated()
                 )
-        );
-        http.csrf(csrf -> csrf.disable());
-        http.addFilterBefore(authenticationJwtTokenFilter(),
-                UsernamePasswordAuthenticationFilter.class);
-
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Stateless authentication
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+                .headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin())) // Allow H2 Console
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -76,19 +68,21 @@ public class WebMvcConfig {
                     .roles("USER")
                     .build();
             UserDetails admin = User.withUsername("admin")
-                    //.password(passwordEncoder().encode("adminPass"))
                     .password(passwordEncoder().encode("adminPass"))
                     .roles("ADMIN")
                     .build();
 
-            JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-            userDetailsManager.createUser(user1);
-            userDetailsManager.createUser(admin);
+            if (!manager.userExists("user1")) {
+                manager.createUser(user1);
+            }
+            if (!manager.userExists("admin")) {
+                manager.createUser(admin);
+            }
         };
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(){
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -96,6 +90,7 @@ public class WebMvcConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration builder) throws Exception {
         return builder.getAuthenticationManager();
     }
+
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurer() {
@@ -104,7 +99,8 @@ public class WebMvcConfig {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:5173")
                         .allowedMethods("*")
-                        .allowedHeaders("*");
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }

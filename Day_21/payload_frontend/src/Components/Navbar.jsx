@@ -1,10 +1,19 @@
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles.css";
 
 function CustomNavbar() {
   const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("username");
+    localStorage.removeItem("roles");
+    navigate("/login");
+  };
+
+  const isLoggedIn = localStorage.getItem("token") !== null;
 
   return (
     <Navbar expand="lg" className="pastel-navbar shadow-sm">
@@ -30,6 +39,19 @@ function CustomNavbar() {
             >
               Add Transaction
             </Nav.Link>
+            {isLoggedIn ? (
+              <Button variant="danger" className="ms-3" onClick={handleLogout}>
+                Logout
+              </Button>
+            ) : (
+              <Button
+                variant="primary"
+                className="ms-3"
+                onClick={() => navigate("/login")}
+              >
+                Login
+              </Button>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

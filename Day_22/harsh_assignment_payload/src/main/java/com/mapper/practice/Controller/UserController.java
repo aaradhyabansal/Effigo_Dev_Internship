@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController()
-
+@CrossOrigin
 public class UserController {
     private final PayloadService payloadService;
     private final JobLauncher jobLauncher;
@@ -44,7 +44,7 @@ public class UserController {
         this.authenticationManager = authenticationManager;
     }
 
-    @PostMapping("/signin")
+    @PostMapping("/payments/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         System.out.println(loginRequest);
         Authentication authentication;

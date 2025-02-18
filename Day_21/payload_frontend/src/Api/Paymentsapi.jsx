@@ -22,3 +22,10 @@ export function deleteUntransactions(id) {
 export function deleteSutransactions(id) {
   return apiClient.delete(`/successfulpayments/${id}`);
 }
+export function getToken(body) {
+  return apiClient.post("/signin", body, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
