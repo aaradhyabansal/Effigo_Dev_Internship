@@ -32,38 +32,58 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         logger.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
 
-        // **Skip JWT validation for login and signup endpoints**
+        // Log all headers for debugging
+        java.util.Enumeration<String> headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            logger.debug("Header '{}': {}", headerName, request.getHeader(headerName));
+        }
+
         if (request.getServletPath().equals("/payments/signin") || request.getServletPath().equals("/payments/signup")) {
+            logger.debug("Skipping authentication for path: {}", request.getServletPath());
             filterChain.doFilter(request, response);
             return;
         }
 
         try {
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+            logger.debug("Extracted JWT: {}", jwt);
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            if (jwt != null) {
+                boolean isValid = jwtUtils.validateJwtToken(jwt);
+                logger.debug("JWT validation result: {}", isValid);
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                if (isValid) {
+                    String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                    logger.debug("Username from JWT: {}", username);
 
-                logger.debug("Roles from JWT: {}", userDetails.getAuthorities());
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    logger.debug("UserDetails loaded: {}", userDetails.getUsername());
+                    logger.debug("User authorities: {}", userDetails.getAuthorities());
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    logger.debug("Authentication set in SecurityContext");
+                }
+            } else {
+                logger.debug("No JWT token found in request");
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+            logger.error("Authentication error", e);
         }
 
         filterChain.doFilter(request, response);
     }
 
     private String parseJwt(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        logger.debug("Authorization header: {}", authHeader);
+
         String jwt = jwtUtils.getJwtFromHeader(request);
-        logger.debug("AuthTokenFilter.java: {}", jwt);
+        logger.debug("Parsed JWT: {}", jwt);
         return jwt;
     }
 }

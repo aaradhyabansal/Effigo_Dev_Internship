@@ -6,6 +6,7 @@ import FailedPayments from "../Components/FailedPayments";
 import AddTransaction from "../Components/AddTransaction";
 import Login from "../Components/Login";
 import PrivateRoute from "../Components/PrivateComponent";
+import StripePayment from "../Components/StripePayment";
 
 function Payload() {
   return (
@@ -19,6 +20,7 @@ function Payload() {
           <Route path="/successfulpayments" element={<SuccessPayments />} />
           <Route path="/failedpayments" element={<FailedPayments />} />
           <Route path="/addtransaction" element={<AddTransaction />} />
+          <Route path="/charge" element={<StripePayment />} />
         </Route>
       </Routes>
     </div>

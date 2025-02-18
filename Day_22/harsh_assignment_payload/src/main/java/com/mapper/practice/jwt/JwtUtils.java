@@ -31,36 +31,60 @@ public class JwtUtils {
         String bearerToken = request.getHeader("Authorization");
         logger.debug("Authorization Header: {}", bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
+            String token = bearerToken.substring(7);
+            logger.debug("Extracted token: {}", token);
+            return token;
         }
+        logger.debug("No bearer token found in header");
         return null;
     }
 
     public String generateTokenFromUsername(UserDetails userDetails) {
         String username = userDetails.getUsername();
-        return Jwts.builder()
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
+
+        String token = Jwts.builder()
                 .subject(username)
-                .issuedAt(new Date())
-                .expiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .issuedAt(now)
+                .expiration(expiryDate)
                 .signWith(key())
                 .compact();
+
+        logger.debug("Generated token for user {}: {}", username, token);
+        return token;
     }
 
     public String getUserNameFromJwtToken(String token) {
-        return Jwts.parser()
-                .verifyWith((SecretKey) key())
-                .build().parseSignedClaims(token)
-                .getPayload().getSubject();
+        try {
+            String username = Jwts.parser()
+                    .verifyWith((SecretKey) key())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload()
+                    .getSubject();
+            logger.debug("Extracted username from token: {}", username);
+            return username;
+        } catch (Exception e) {
+            logger.error("Error extracting username from token: {}", e.getMessage());
+            return null;
+        }
     }
 
     private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        logger.debug("Key length: {}", keyBytes.length);
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public boolean validateJwtToken(String authToken) {
         try {
-            System.out.println("Validate");
-            Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(authToken);
+            logger.debug("Validating token: {}", authToken);
+            Jwts.parser()
+                    .verifyWith((SecretKey) key())
+                    .build()
+                    .parseSignedClaims(authToken);
+            logger.debug("Token validation successful");
             return true;
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());

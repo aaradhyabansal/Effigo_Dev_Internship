@@ -31,3 +31,6 @@ spring:
 logging:
   level:
     org.springframework.security: DEBUG
+stripe:
+  api:
+    key: ${STRIPE_API_SECRET_KEY}

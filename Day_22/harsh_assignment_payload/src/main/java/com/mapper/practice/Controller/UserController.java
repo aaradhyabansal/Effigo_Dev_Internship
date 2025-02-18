@@ -1,5 +1,7 @@
 package com.mapper.practice.Controller;
 
+import com.mapper.practice.Client.StripeClient;
+import com.mapper.practice.CustomDataType.StripeP;
 import com.mapper.practice.DTO.ExternalDto;
 import com.mapper.practice.DTO.InternalDto;
 import com.mapper.practice.DTO.LoginRequest;
@@ -8,6 +10,7 @@ import com.mapper.practice.Model.SuccessfulPayloadEntity;
 import com.mapper.practice.Model.UnSuccessfulPayloadEntity;
 import com.mapper.practice.Service.PayloadService;
 import com.mapper.practice.jwt.JwtUtils;
+import com.stripe.model.Charge;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -28,20 +31,25 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController()
-@CrossOrigin
 public class UserController {
     private final PayloadService payloadService;
     private final JobLauncher jobLauncher;
     private final Job paymentJob;
     private JwtUtils jwtUtils;
     private AuthenticationManager authenticationManager;
+    private StripeClient stripeClient;
 
-    public UserController(PayloadService payloadService, JobLauncher jobLauncher, Job paymentJob, JwtUtils jwtUtils, AuthenticationManager authenticationManager) {
-        this.payloadService = payloadService;
-        this.jobLauncher = jobLauncher;
-        this.paymentJob = paymentJob;
-        this.jwtUtils = jwtUtils;
+    public UserController(StripeClient stripeClient, AuthenticationManager authenticationManager, JwtUtils jwtUtils, Job paymentJob, JobLauncher jobLauncher, PayloadService payloadService) {
+        this.stripeClient = stripeClient;
         this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+        this.paymentJob = paymentJob;
+        this.jobLauncher = jobLauncher;
+        this.payloadService = payloadService;
+    }
+    @PostMapping("/charge")
+    public Charge chargeCard(@RequestBody StripeP body) throws Exception {
+        return this.stripeClient.chargeNewCard(body.getToken(),body.getAmount());
     }
 
     @PostMapping("/payments/signin")
@@ -50,7 +58,9 @@ public class UserController {
         Authentication authentication;
         try {
             authentication = authenticationManager
-                    .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                    .authenticate(new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsername(),
+                            loginRequest.getPassword()));
         } catch (AuthenticationException exception) {
             Map<String, Object> map = new HashMap<>();
             map.put("message", "Bad credentials");
@@ -62,18 +72,19 @@ public class UserController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
+
         String jwtToken = jwtUtils.generateTokenFromUsername(userDetails);
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());
 
-        LoginResponse response = new LoginResponse( jwtToken,userDetails.getUsername(), roles);
+        LoginResponse response = new LoginResponse(jwtToken, userDetails.getUsername(), roles);
 
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/convert")
+    @PostMapping("/payments/convert")
     public ResponseEntity<String> convertToInternal(@RequestBody List<ExternalDto> payloadExternalDTO) {
 //        InternalDto paymentInternalDTO = payloadService.convertToInternal(payloadExternalDTO);
         payloadService.setPaymentsToProcess(payloadExternalDTO);
@@ -92,21 +103,20 @@ public class UserController {
 
 //        return ResponseEntity.ok(paymentInternalDTO);
     }
-    @GetMapping("/successful")
+    @GetMapping("/payments/successful")
     public List<SuccessfulPayloadEntity> successfulPayments() {
-
         return payloadService.getSuccessfulPayments();
     }
-    @GetMapping("/failed")
+    @GetMapping("/payments/failed")
     public List<UnSuccessfulPayloadEntity> unSuccessfulPayments() {
         return payloadService.getUnSuccessfulPayments();
     }
-    @DeleteMapping("/failedpayments/{id}")
+    @DeleteMapping("/payments/failedpayments/{id}")
     public void deleteFRecord(@PathVariable long id)
     {
         payloadService.deleteUnTransactionById(id);
     }
-    @DeleteMapping("/successfulpayments/{id}")
+    @DeleteMapping("/payments/successfulpayments/{id}")
     public void deleteSRecord(@PathVariable long id)
     {
         payloadService.deleteSuTransactionById(id);

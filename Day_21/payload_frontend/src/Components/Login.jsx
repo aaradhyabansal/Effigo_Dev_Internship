@@ -10,16 +10,18 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      setError("");
-      const response = await getToken({ username, password });
-      const data = response.data;
+      setError(""); // Reset error before new attempt
 
-      if (response.status === 200) {
-        localStorage.setItem("token", data.jwtToken);
+      const response = await getToken({ username, password }); // `data` is already `response.data`
+      const data = response.data;
+      if (data.jwtToken) {
+        // Store token & user details in localStorage
+        console.log(data.jwtToken);
+        localStorage.setItem("token", data.jwtToken); // No need to add "Bearer" here
         localStorage.setItem("username", data.username);
         localStorage.setItem("roles", JSON.stringify(data.roles));
 
-        navigate("/home");
+        navigate("/home"); // Redirect only after successful login
       } else {
         setError(data.message || "Invalid credentials!");
       }
