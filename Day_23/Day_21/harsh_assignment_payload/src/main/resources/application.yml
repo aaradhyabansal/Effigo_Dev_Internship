@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: practice
+
+  data:
+    mongodb:
+      uri: ${SPRING_DATASOURCE_URI}
+      database: ${SPRING_DATASOURCE_DBNAME}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  config:
+    import: optional:file:.env[.properties]
