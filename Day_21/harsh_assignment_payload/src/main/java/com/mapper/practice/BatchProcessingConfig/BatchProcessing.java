@@ -21,11 +21,14 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
-import org.springframework.batch.item.ItemProcessor;
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.ItemWriter;
+import org.springframework.batch.item.*;
+import org.springframework.batch.item.file.ResourceAwareItemReaderItemStream;
+import org.springframework.batch.item.json.JacksonJsonObjectReader;
+import org.springframework.batch.item.json.JsonItemReader;
+import org.springframework.batch.item.json.builder.JsonItemReaderBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.task.SimpleAsyncTaskExecutor;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -65,22 +68,37 @@ public class BatchProcessing {
 
     @Component
     @StepScope
-    public class PaymentReader implements ItemReader<ExternalDto> {
-        private Iterator<ExternalDto> paymentIterator;
-        private boolean initialized = false;
+    public class PaymentReader implements ItemStreamReader<ExternalDto> {
+        private JsonItemReader<ExternalDto> delegate;
+
+        public PaymentReader() {
+            JacksonJsonObjectReader<ExternalDto> jsonObjectReader = new JacksonJsonObjectReader<>(ExternalDto.class);
+
+            delegate = new JsonItemReaderBuilder<ExternalDto>()
+                    .jsonObjectReader(jsonObjectReader)
+                    .resource(new ClassPathResource("payload.json"))
+                    .name("payloadJsonItemReader")
+                    .build();
+        }
 
         @Override
-        public ExternalDto read() {
-            if (!initialized) {
-                List<ExternalDto> payments = payloadService.getPaymentsToProcess();
-                if (payments.isEmpty()) {
-                    return null;
-                }
-                this.paymentIterator = payments.iterator();
-                initialized = true;
-            }
+        public ExternalDto read() throws Exception {
+            return delegate.read();
+        }
 
-            return paymentIterator.hasNext() ? paymentIterator.next() : null;
+        @Override
+        public void open(ExecutionContext executionContext) throws ItemStreamException {
+            delegate.open(executionContext);
+        }
+
+        @Override
+        public void update(ExecutionContext executionContext) throws ItemStreamException {
+            delegate.update(executionContext);
+        }
+
+        @Override
+        public void close() throws ItemStreamException {
+            delegate.close();
         }
     }
 
@@ -111,7 +129,6 @@ public class BatchProcessing {
             for(ValidationState payment: payments) {
                 if(payment.isFailed())
                 {
-                    System.out.println("Hi from failed");
                     UnSuccessfulPayloadEntity payloadEntity = conversionMapper.InternalDtoToFailedEntity(payment.getInternalDto());
                     if (payloadEntity.getInvoices() != null) {
                         payloadEntity.getInvoices().forEach(invoice -> invoice.setUnSuccessfulPayload(payloadEntity));
