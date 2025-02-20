@@ -109,7 +109,6 @@ public interface ConversionMapper {
     @Mapping(target="gst",source="paymentsReqDetails.gst",qualifiedByName = "stringToInteger")
     UnSuccessfulPayloadEntity InternalDtoToFailedEntity(InternalDto internalDto);
 
-
     @Named("stringToInteger")
     default Integer stringToInteger(String amtStr) {
         if (amtStr == null || amtStr.isEmpty()) {
@@ -120,6 +119,7 @@ public interface ConversionMapper {
         } catch (NumberFormatException e) {
             throw new RuntimeException("Invalid number format: " + amtStr);
         }
+
     }
 
 }
