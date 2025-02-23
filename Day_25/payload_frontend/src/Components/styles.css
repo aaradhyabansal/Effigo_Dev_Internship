@@ -1,0 +1,143 @@
+/* Apply a refined pastel gradient with a slightly darker touch */
+body {
+  background: linear-gradient(to bottom right, #f4ece6, #d6dfea);
+  min-height: 100vh;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+
+/* General Container Styling */
+.pastel-container {
+  background: rgba(245, 235, 224, 0.9); /* Slightly richer off-white */
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.12);
+}
+
+/* Navbar */
+.pastel-navbar {
+  background: linear-gradient(to right, #e7c8a0, #c4d0e2);
+  padding: 12px 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link-custom {
+  font-weight: 600;
+  color: #544a4a !important;
+  transition: all 0.3s ease-in-out;
+}
+
+.nav-link-custom:hover {
+  color: #8b658b !important;
+  transform: scale(1.05);
+}
+
+/* Title Styling */
+.highlight-title {
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.15);
+  color: #544a4a;
+  font-weight: bold;
+}
+
+/* Card Styling */
+.pastel-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.pastel-card:hover {
+  box-shadow: 0px 14px 28px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+}
+
+/* Table Styling */
+.pastel-table {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.pastel-table th,
+.pastel-table td {
+  font-weight: bold;
+  color: #544a4a;
+  border-bottom: 1px solid #ccc;
+  padding: 12px;
+}
+
+/* Table Row Hover Effect */
+.pastel-table tr {
+  transition: transform 0.3s ease-in-out;
+}
+
+.pastel-table tr:hover {
+  transform: translateY(-3px);
+  background-color: #e5d2da;
+}
+
+/* Button Styling */
+.pastel-button {
+  background-color: #c0899d !important;
+  color: white !important;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.pastel-button:hover {
+  background-color: #915e74 !important;
+  box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Outline Button */
+.outline-pastel {
+  border: 2px solid #c0899d !important;
+  color: #c0899d !important;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.outline-pastel:hover {
+  background-color: #c0899d !important;
+  color: white !important;
+}
+
+/* Alert Styling */
+.pastel-alert {
+  background-color: #edd7df !important;
+  border-color: #c0899d !important;
+  color: #544a4a !important;
+}
+
+/* Hover Effect */
+.hover-effect {
+  transition: transform 0.3s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: translateY(-3px);
+}
+
+/* Card Box Shadow */
+.highlight-card {
+  transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+.highlight-card:hover {
+  box-shadow: 0px 14px 28px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+}
+
+/* Text Styling */
+.highlight-text {
+  color: #6a5d60;
+}
+
+/* Highlight Button */
+.highlight-button {
+  transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.highlight-button:hover {
+  background-color: #915e74;
+  box-shadow: 0px 5px 12px rgba(0, 0, 0, 0.2);
+}

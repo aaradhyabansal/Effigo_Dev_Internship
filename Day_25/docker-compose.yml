@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  frontend:
+    build:
+      context: ./payload_frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    ports:
+      - "5173:4173"
+    networks:
+      - common-network
+    depends_on:
+      - l1-backend
+
+  l1-backend:
+    build:
+      context: ./payload
+      dockerfile: Dockerfile
+    container_name: l1-backend
+    ports:
+      - "8080:8080"
+    networks:
+      - common-network
+    
+    depends_on:
+      - l2-backend
+    
+
+  l2-backend:
+    build:
+      context: ./harsh_assignment_payload
+      dockerfile: Dockerfile
+    container_name: l2-backend
+    ports:
+      - "8081:8081"
+    networks:
+      - common-network
+    env_file:
+      - .env
+
+
+networks:
+  common-network:
+    driver: bridge
