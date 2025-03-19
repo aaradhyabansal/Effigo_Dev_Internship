@@ -1,0 +1,2 @@
+@getter @setter should be changed to @Data
+serverProperties

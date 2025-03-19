@@ -36,20 +36,13 @@ public class L1Controller {
             File file = new File(FILE_PATH);
             if (!file.exists()) return new ArrayList<>();
             return objectMapper.readValue(file, new TypeReference<List<ExternalDto>>() {});
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
 
-    private void writePayloadsToFile(List<ExternalDto> products) {
-        try {
-            objectMapper.writeValue(new File(FILE_PATH), products);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
-    }
 
     @PostMapping("/convert")
     public ResponseEntity<String> convertToInternal(@RequestBody List<ExternalDto> payloadExternalDTO) {

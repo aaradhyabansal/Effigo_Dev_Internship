@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Slf4j
 public class UnSuccessfulPayloadEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,6 +41,7 @@ public class UnSuccessfulPayloadEntity {
     public void addInvoice(InvoiceEntity invoice) {
         invoices.add(invoice);
         invoice.setUnSuccessfulPayload(this);
+        log.info("here we add invoice");
     }
 
     public void removeInvoice(InvoiceEntity invoice) {

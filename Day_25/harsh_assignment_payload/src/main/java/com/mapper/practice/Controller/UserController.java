@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.l1l2Integration.payload.DTO.ExternalDto;
 import com.l1l2Integration.payload.DTO.ResultDto;
-import com.mapper.practice.Model.SuccessfulPayloadEntity;
-import com.mapper.practice.Model.UnSuccessfulPayloadEntity;
 import com.mapper.practice.Service.PayloadService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Job;
@@ -18,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +40,8 @@ public class UserController {
             File file = new File(FILE_PATH);
             if (!file.exists()) return new ArrayList<>();
             return objectMapper.readValue(file, new TypeReference<List<ExternalDto>>() {});
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -52,8 +49,8 @@ public class UserController {
     private void writePayloadsToFile(List<ExternalDto> products) {
         try {
             objectMapper.writeValue(new File(FILE_PATH), products);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
 
     }
@@ -76,6 +73,7 @@ public class UserController {
             jobLauncher.run(paymentJob, jobParameters);
             return ResponseEntity.ok("Payment processing started successfully");
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Batch processing failed: " + e.getMessage());
         }
 

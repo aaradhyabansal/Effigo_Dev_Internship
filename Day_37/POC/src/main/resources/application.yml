@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: POC
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  servlet:
+      multipart:
+        max-file-size: 10MB
+        max-request-size: 10MB
+
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+       ddl-auto: update
+
+  config:
+    import: optional:file:.env[.properties]
+
+aws:
+  s3:
+    bucket-name: ${AWS_BUCKET_NAME}
+    bucket-datalake : ${AWS_DATA_LAKE_NAME}
+    dynamo-tablename : ${AWS_DYNAMO_TABLE}
+  credentials:
+    access-key: ${AWS_ACCESS_KEY}
+    secret-key: ${AWS_SECRET_KEY}
+
+filesize : ${MAX_FILE_SIZE}

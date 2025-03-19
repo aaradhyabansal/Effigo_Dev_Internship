@@ -14,24 +14,23 @@ import com.mapper.practice.Model.UnSuccessfulPayloadEntity;
 import com.mapper.practice.Repository.InvoiceRepository;
 import com.mapper.practice.Repository.SuccessfulPayloadRepository;
 import com.mapper.practice.Repository.UnSuccessfulPayloadRepository;
-import org.hibernate.tool.schema.internal.exec.ScriptTargetOutputToFile;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 
 @Service
 public class PayloadService {
+    @Getter
+    @Setter
     private List<ExternalDto> paymentsToProcess = new ArrayList<>();
     private final InvoiceRepository invoiceRepository;
     private final SuccessfulPayloadRepository successfulPayloadRepository;
@@ -48,14 +47,6 @@ public class PayloadService {
         this.unSuccessfulPayloadRepository = unSuccessfulPayloadRepository;
         this.successfulPayloadRepository = successfulPayloadRepository;
         this.invoiceRepository = invoiceRepository;
-        this.paymentsToProcess = paymentsToProcess;
-    }
-
-    public List<ExternalDto> getPaymentsToProcess() {
-        return paymentsToProcess;
-    }
-
-    public void setPaymentsToProcess(List<ExternalDto> paymentsToProcess) {
         this.paymentsToProcess = paymentsToProcess;
     }
 
